@@ -33,9 +33,16 @@ struct ContentView: View {
         }
     }
     
+    func printCopyrightInfo() {
+        Task {
+            let copyright = try await dataProvider.getCopyrightInfo()
+            print(copyright)
+        }
+    }
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
+            Image(systemName: "tram.fill.tunnel")
                 .imageScale(.large)
                 .foregroundStyle(.tint)
             Button("Print nearest stations") {
@@ -46,6 +53,9 @@ struct ContentView: View {
             }
             Button("Print carrier info") {
                 printCarrierInfo()
+            }
+            Button("Print copyright info") {
+                printCopyrightInfo()
             }
         }
         .padding()

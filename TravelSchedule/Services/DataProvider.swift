@@ -9,6 +9,7 @@ protocol DataProviderProtocol {
     func getNearestStations(lat: Double, lng: Double, distance: Int) async throws -> Components.Schemas.Stations
     func getNearestSettlement(lat: Double, lng: Double, distance: Int) async throws -> Components.Schemas.Settlement
     func getCarrierInfo(code: String, system: String) async throws -> Components.Schemas.Carriers
+    func getCopyrightInfo() async throws -> Components.Schemas.Copyright
 }
 
 final class DataProvider: DataProviderProtocol {
@@ -45,6 +46,13 @@ final class DataProvider: DataProviderProtocol {
             apikey: apikey,
             code: code,
             system: system
+        ))
+        return try response.ok.body.json
+    }
+    
+    func getCopyrightInfo() async throws -> Components.Schemas.Copyright {
+        let response = try await client.getCopyright(query: .init(
+            apikey: apikey
         ))
         return try response.ok.body.json
     }
