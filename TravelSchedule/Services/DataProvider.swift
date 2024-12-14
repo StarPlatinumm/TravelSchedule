@@ -1,5 +1,6 @@
 import OpenAPIRuntime
 import OpenAPIURLSession
+import Foundation
 
 typealias NearestStations = Components.Schemas.Stations
 typealias NearestSettlement = Components.Schemas.Settlement
@@ -9,17 +10,14 @@ protocol DataProviderProtocol {
     func getNearestStations(lat: Double, lng: Double, distance: Int) async throws -> Components.Schemas.Stations
     func getNearestSettlement(lat: Double, lng: Double, distance: Int) async throws -> Components.Schemas.Settlement
     func getCarrierInfo(code: String, system: String) async throws -> Components.Schemas.Carriers
+    func getStationsList() async throws
     func getCopyrightInfo() async throws -> Components.Schemas.Copyright
 }
 
 final class DataProvider: DataProviderProtocol {
-    private let client: Client
-    private let apikey: String
+    private let client = Client(serverURL: try! Servers.Server1.url(), transport: URLSessionTransport())
+    private let apikey = "4f5cb8fb-cdbd-4619-8ebf-aedd5c80cc35"
     
-    init(client: Client, apikey: String) {
-        self.client = client
-        self.apikey = apikey
-    }
     
     func getNearestStations(lat: Double, lng: Double, distance: Int) async throws -> Components.Schemas.Stations {
         let response = try await client.getNearestStations(query: .init(
@@ -48,6 +46,14 @@ final class DataProvider: DataProviderProtocol {
             system: system
         ))
         return try response.ok.body.json
+    }
+    
+    func getStationsList() async throws {
+        let response = try await client.getStationsList(query: .init(
+            apikey: apikey
+        ))
+        
+        print(response)
     }
     
     func getCopyrightInfo() async throws -> Components.Schemas.Copyright {

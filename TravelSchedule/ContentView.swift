@@ -3,14 +3,7 @@ import OpenAPIRuntime
 import OpenAPIURLSession
 
 struct ContentView: View {
-    let apikey = "4f5cb8fb-cdbd-4619-8ebf-aedd5c80cc35"
-    let client: Client
-    let dataProvider: DataProvider
-    
-    init() {
-        client = Client(serverURL: try! Servers.Server1.url(), transport: URLSessionTransport())
-        dataProvider = DataProvider(client: client, apikey: apikey)
-    }
+    let dataProvider = DataProvider()
     
     func printNearestStations() {
         Task {
@@ -40,8 +33,15 @@ struct ContentView: View {
         }
     }
     
+    func printStationsList() {
+        Task {
+//            let stationsList = try await dataProvider.getStationsList()
+//            print(stationsList)
+        }
+    }
+    
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             Image(systemName: "tram.fill.tunnel")
                 .imageScale(.large)
                 .foregroundStyle(.tint)
@@ -53,6 +53,9 @@ struct ContentView: View {
             }
             Button("Print carrier info") {
                 printCarrierInfo()
+            }
+            Button("Print all stations") {
+                printStationsList()
             }
             Button("Print copyright info") {
                 printCopyrightInfo()
