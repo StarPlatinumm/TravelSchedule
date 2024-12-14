@@ -5,14 +5,17 @@ import OpenAPIURLSession
 struct ContentView: View {
     let dataProvider = DataProvider()
     
+    func printSearch() {
+        Task {
+            let search = try await dataProvider.getSearch(from: "c146", to: "c213", limit: 3)
+            print(search)
+        }
+    }
+    
     func printThread() {
         Task {
-            do {
-                let thread = try await dataProvider.getThread(uid: "018J_1_2", from: nil, to: nil, date: nil, show_systems: "all")
-                print(thread)
-            } catch {
-                print(error)
-            }
+            let thread = try await dataProvider.getThread(uid: "018J_1_2", show_systems: "all")
+            print(thread)
         }
     }
     
@@ -46,8 +49,13 @@ struct ContentView: View {
     
     func printStationsList() {
         Task {
-            //let stationsList = try await dataProvider.getStationsList()
-            //print(stationsList)
+            do {
+                let stationsList = try await dataProvider.getStationsList()
+                print(stationsList)
+            } catch {
+                print(error)
+            }
+            
         }
     }
     
@@ -56,6 +64,9 @@ struct ContentView: View {
             Image(systemName: "tram.fill.tunnel")
                 .imageScale(.large)
                 .foregroundStyle(.tint)
+            Button("1. Расписание рейсов между станциями") {
+                printSearch()
+            }
             Button("3. Список станций следования") {
                 printThread()
             }
