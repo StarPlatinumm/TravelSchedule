@@ -40,22 +40,17 @@ struct ContentView: View {
         }
     }
     
+    func printStationsList() {
+        Task {
+            let stationsList = try await dataProvider.getStationsList()
+            print(stationsList.countries?[0])
+        }
+    }
+    
     func printCopyrightInfo() {
         Task {
             let copyright = try await dataProvider.getCopyrightInfo()
             print(copyright)
-        }
-    }
-    
-    func printStationsList() {
-        Task {
-            do {
-                let stationsList = try await dataProvider.getStationsList()
-                print(stationsList)
-            } catch {
-                print(error)
-            }
-            
         }
     }
     
