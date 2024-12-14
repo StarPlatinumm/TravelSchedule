@@ -8,6 +8,7 @@ typealias Carrier = Components.Schemas.Settlement
 
 protocol DataProviderProtocol {
     func getSearch(from: String, to: String, date: String?, show_systems: String?, transport_types: String?, system: String?, offset: Int?, limit: Int?, result_timezone: String?, add_days_mask: Bool?, transfers: Bool?) async throws -> Components.Schemas.SearchSchema
+    func getSchedule(station: String, date: String?, transport_types: String?, system: String?, show_systems: String?, result_timezone: String?, event: String?, direction: String?) async throws -> Components.Schemas.ScheduleSchema
     func getThread(uid: String, from: String?, to: String?, date: String?, show_systems: String?) async throws -> Components.Schemas.Thread
     func getNearestStations(lat: Double, lng: Double, distance: Int) async throws -> Components.Schemas.Stations
     func getNearestSettlement(lat: Double, lng: Double, distance: Int) async throws -> Components.Schemas.Settlement
@@ -34,6 +35,21 @@ final class DataProvider: DataProviderProtocol {
             result_timezone: result_timezone,
             add_days_mask: add_days_mask,
             transfers: transfers
+        ))
+        return try response.ok.body.json
+    }
+    
+    func getSchedule(station: String, date: String? = nil, transport_types: String? = nil, system: String? = nil, show_systems: String? = nil, result_timezone: String? = nil, event: String? = nil, direction: String? = nil) async throws -> Components.Schemas.ScheduleSchema {
+        let response = try await client.getSchedule(query: .init(
+            apikey: apikey,
+            station: station,
+            date: date,
+            transport_types: transport_types,
+            system: system,
+            show_systems: show_systems,
+            result_timezone: result_timezone,
+            event: event,
+            direction: direction
         ))
         return try response.ok.body.json
     }

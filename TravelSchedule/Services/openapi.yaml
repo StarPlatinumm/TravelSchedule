@@ -107,6 +107,86 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SearchSchema'
+  /v3.0/schedule/:
+    get:
+      tags:
+      - getSchedule
+      summary: Расписание рейсов по станции
+      operationId: getSchedule
+      parameters:
+      - name: apikey
+        in: query
+        description: API key
+        required: true
+        schema:
+          type: string
+      - name: station
+        in: query
+        description: Код станции
+        required: true
+        schema:
+          type: string
+      - name: format
+        in: query
+        description: json или xml
+        required: false
+        schema:
+          type: string
+      - name: lang
+        in: query
+        description: lang
+        required: false
+        schema:
+          type: string
+      - name: date
+        in: query
+        description: Дата
+        required: false
+        schema:
+          type: string
+      - name: transport_types
+        in: query
+        description: Тип транспортного средства
+        required: false
+        schema:
+          type: string
+      - name: system
+        in: query
+        description: system
+        required: false
+        schema:
+          type: string
+      - name: show_systems
+        in: query
+        description: Системы кодирования
+        required: false
+        schema:
+          type: string
+      - name: result_timezone
+        in: query
+        description: result_timezone
+        required: false
+        schema:
+          type: string
+      - name: event
+        in: query
+        description: event
+        required: false
+        schema:
+          type: string
+      - name: direction
+        in: query
+        description: direction
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduleSchema'
   /v3.0/thread/:
     get:
       tags:
@@ -700,6 +780,125 @@ components:
                   type: string
                 title:
                   type: string
+    ScheduleSchema:
+      type: object
+      properties:
+        date:
+          type: string
+        pagination:
+          type: object
+          properties:
+            total:
+              type: number
+            limit:
+              type: number
+            offset:
+              type: number
+        station:
+          type: object
+          properties:
+            code:
+              type: string
+            station_type:
+              type: string
+            station_type_name:
+              type: string
+            title:
+              type: string
+            popular_title:
+              type: string
+            short_title:
+              type: string
+            codes:
+              type: object
+              properties:
+                yandex:
+                  type: string
+                esr:
+                  type: string
+            transport_type:
+              type: string
+            type:
+              type: string
+        schedule:
+          type: array
+          items:
+            type: object
+            properties:
+              except_days:
+                type: string
+              arrival:
+                type: string
+              thread:
+                type: object
+                properties:
+                  uid:
+                    type: string
+                  title:
+                    type: string
+                  number:
+                    type: string
+                  short_title:
+                    type: string
+                  carrier:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      codes:
+                        type: object
+                        properties:
+                          icao:
+                            type: string
+                          sirena:
+                            type: string
+                          iata:
+                            type: string
+                      title:
+                        type: string
+                  transport_type:
+                    type: string
+                  vehicle:
+                    type: string
+                  transport_subtype:
+                    type: object
+                    properties:
+                      color:
+                        type: string
+                      code:
+                        type: string
+                      title:
+                        type: string
+                  express_type:
+                    type: string
+              is_fuzzy:
+                  type: boolean
+              days:
+                  type: string
+              stops:
+                  type: string
+              departure:
+                  type: string
+              terminal:
+                  type: string
+              platform:
+                  type: string
+        schedule_direction:
+          type: object
+          properties:
+            code:
+              type: string
+            title:
+              type: string
+        directions:
+          type: array
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+              title:
+                type: string
     Thread:
       type: object
       properties:

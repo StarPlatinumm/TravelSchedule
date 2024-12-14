@@ -12,6 +12,13 @@ struct ContentView: View {
         }
     }
     
+    func printSchedule() {
+        Task {
+            let schedule = try await dataProvider.getSchedule(station: "s9600213", transport_types: "suburban", direction: "на Москву")
+            print(schedule)
+        }
+    }
+    
     func printThread() {
         Task {
             let thread = try await dataProvider.getThread(uid: "018J_1_2", show_systems: "all")
@@ -56,11 +63,11 @@ struct ContentView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Image(systemName: "tram.fill.tunnel")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
             Button("1. Расписание рейсов между станциями") {
                 printSearch()
+            }
+            Button("2. Расписание рейсов по станции") {
+                printSchedule()
             }
             Button("3. Список станций следования") {
                 printThread()
