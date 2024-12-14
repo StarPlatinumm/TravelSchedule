@@ -26,6 +26,13 @@ struct ContentView: View {
         }
     }
     
+    func printCarrierInfo() {
+        Task {
+            let carrier = try await dataProvider.getCarrierInfo(code: "TK", system: "iata")
+            print(carrier)
+        }
+    }
+    
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -36,6 +43,9 @@ struct ContentView: View {
             }
             Button("Print nearest settlement") {
                 printNearestSettlement()
+            }
+            Button("Print carrier info") {
+                printCarrierInfo()
             }
         }
         .padding()
