@@ -7,7 +7,7 @@ typealias NearestSettlement = Components.Schemas.Settlement
 typealias Carrier = Components.Schemas.Settlement
 
 protocol DataProviderProtocol {
-    func getThread(uid: String, from: String?, to: String?, show_systems: String?) async throws -> Components.Schemas.Thread
+    func getThread(uid: String, from: String?, to: String?, date: String?, show_systems: String?) async throws -> Components.Schemas.Thread
     func getNearestStations(lat: Double, lng: Double, distance: Int) async throws -> Components.Schemas.Stations
     func getNearestSettlement(lat: Double, lng: Double, distance: Int) async throws -> Components.Schemas.Settlement
     func getCarrierInfo(code: String, system: String) async throws -> Components.Schemas.Carriers
@@ -19,12 +19,13 @@ final class DataProvider: DataProviderProtocol {
     private let client = Client(serverURL: try! Servers.Server1.url(), transport: URLSessionTransport())
     private let apikey = "4f5cb8fb-cdbd-4619-8ebf-aedd5c80cc35"
     
-    func getThread(uid: String, from: String?, to: String?, show_systems: String?) async throws -> Components.Schemas.Thread {
+    func getThread(uid: String, from: String?, to: String?, date: String?, show_systems: String?) async throws -> Components.Schemas.Thread {
         let response = try await client.getThread(query: .init(
             apikey: apikey,
             uid: uid,
             from: from,
             to: to,
+            date: date,
             show_systems: show_systems
         ))
         return try response.ok.body.json

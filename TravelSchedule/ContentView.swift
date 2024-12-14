@@ -8,7 +8,7 @@ struct ContentView: View {
     func printThread() {
         Task {
             do {
-                let thread = try await dataProvider.getThread(uid: "018J_1_2", from: nil, to: nil, show_systems: "all")
+                let thread = try await dataProvider.getThread(uid: "018J_1_2", from: nil, to: nil, date: nil, show_systems: "all")
                 print(thread)
             } catch {
                 print(error)
@@ -56,22 +56,22 @@ struct ContentView: View {
             Image(systemName: "tram.fill.tunnel")
                 .imageScale(.large)
                 .foregroundStyle(.tint)
-            Button("Print thread") {
+            Button("3. Список станций следования") {
                 printThread()
             }
-            Button("Print nearest stations") {
+            Button("4. Список ближайших станций") {
                 printNearestStations()
             }
-            Button("Print nearest settlement") {
+            Button("5. Ближайший город") {
                 printNearestSettlement()
             }
-            Button("Print carrier info") {
+            Button("6. Информация о перевозчике") {
                 printCarrierInfo()
             }
-            Button("Print all stations") {
+            Button("7. Список всех доступных станций") {
                 printStationsList()
             }
-            Button("Print copyright info") {
+            Button("8. Копирайт Яндекс Расписаний") {
                 printCopyrightInfo()
             }
         }
