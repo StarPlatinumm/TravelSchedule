@@ -5,6 +5,17 @@ import OpenAPIURLSession
 struct ContentView: View {
     let dataProvider = DataProvider()
     
+    func printThread() {
+        Task {
+            do {
+                let thread = try await dataProvider.getThread(uid: "018J_1_2", from: nil, to: nil, show_systems: "all")
+                print(thread)
+            } catch {
+                print(error)
+            }
+        }
+    }
+    
     func printNearestStations() {
         Task {
             let stations = try await dataProvider.getNearestStations(lat: 59.864177, lng: 30.319163, distance: 50)
@@ -35,8 +46,8 @@ struct ContentView: View {
     
     func printStationsList() {
         Task {
-//            let stationsList = try await dataProvider.getStationsList()
-//            print(stationsList)
+            //let stationsList = try await dataProvider.getStationsList()
+            //print(stationsList)
         }
     }
     
@@ -45,6 +56,9 @@ struct ContentView: View {
             Image(systemName: "tram.fill.tunnel")
                 .imageScale(.large)
                 .foregroundStyle(.tint)
+            Button("Print thread") {
+                printThread()
+            }
             Button("Print nearest stations") {
                 printNearestStations()
             }

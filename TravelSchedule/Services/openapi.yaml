@@ -9,6 +9,68 @@ tags:
 - name: Список ближайших станций
   description: Список ближайших станций
 paths:
+  /v3.0/thread/:
+    get:
+      tags:
+      - getThread
+      summary: Список станций следования
+      operationId: getThread
+      parameters:
+      - name: apikey
+        in: query
+        description: API key
+        required: true
+        schema:
+          type: string
+      - name: uid
+        in: query
+        description: Идентификатор нитки
+        required: true
+        schema:
+          type: string
+      - name: from
+        in: query
+        description: Код станции отправления
+        required: false
+        schema:
+          type: string
+      - name: to
+        in: query
+        description: Код станции прибытия
+        required: false
+        schema:
+          type: string
+      - name: format
+        in: query
+        description: json или xml
+        required: false
+        schema:
+          type: string
+      - name: lang
+        in: query
+        description: lang
+        required: false
+        schema:
+          type: string
+      - name: date
+        in: query
+        description: Дата
+        required: false
+        schema:
+          type: string
+      - name: show_systems
+        in: query
+        description: Системы кодирования
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Thread'
   /v3.0/nearest_stations/:
     get:
       tags:
@@ -201,6 +263,122 @@ paths:
                 $ref: '#/components/schemas/Copyright'
 components:
   schemas:
+    Thread:
+      type: object
+      properties:
+        except_days:
+          type: string
+        arrival_date:
+          type: string
+          format: string
+        from:
+          type: string
+        uid:
+          type: string
+        title:
+          type: string
+        interval:
+          type: object
+          properties:
+            density:
+              type: string
+            end_time:
+              type: string
+              format: string
+            begin_time:
+              type: string
+              format: string
+        departure_date:
+          type: string
+          format: string
+        start_time:
+          type: string
+        number:
+          type: string
+        short_title:
+          type: string
+        days:
+          type: string
+        to:
+          type: string
+        carrier:
+          type: object
+          properties:
+            code:
+              type: integer
+            offices:
+              type: array
+              items: {}
+            codes:
+              type: object
+              properties:
+                icao:
+                  type: string
+                sirena:
+                  type: string
+                iata:
+                  type: string
+            title:
+              type: string
+        transport_type:
+          type: string
+        stops:
+          type: array
+          items:
+            type: object
+            properties:
+              arrival:
+                type: string
+                format: string
+              departure:
+                type: string
+                format: string
+              terminal:
+                type: string
+              platform:
+                type: string
+              station:
+                type: object
+                properties:
+                  codes:
+                    type: object
+                    properties:
+                      express:
+                        type: string
+                      yandex:
+                        type: string
+                      esr:
+                        type: string
+                  title:
+                    type: string
+                  popular_title:
+                    type: string
+                  short_title:
+                    type: string
+                  code:
+                    type: string
+                  type:
+                    type: string
+              stop_time:
+                type: integer
+              duration:
+                type: number
+        vehicle:
+          type: string
+        start_date:
+          type: string
+          format: string
+        transport_subtype:
+          type: object
+          properties:
+            color:
+              type: string
+            code:
+              type: string
+            title:
+              type: string
+        express_type:
+          type: string
     StationsList:
       type: object
       properties:
