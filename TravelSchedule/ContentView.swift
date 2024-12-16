@@ -5,56 +5,70 @@ import OpenAPIURLSession
 struct ContentView: View {
     let dataProvider = DataProvider()
     
-    func printSearch() {
-        Task {
+    private func printSearch() async {
+        do {
             let search = try await dataProvider.getSearch(from: "c146", to: "c213", limit: 3)
             print(search)
+        } catch {
+            print(error)
         }
     }
     
-    func printSchedule() {
-        Task {
+    private func printSchedule() async {
+        do {
             let schedule = try await dataProvider.getSchedule(station: "s9600213", transport_types: "suburban", direction: "на Москву")
             print(schedule)
+        } catch {
+            print(error)
         }
     }
     
-    func printThread() {
-        Task {
+    private func printThread() async {
+        do {
             let thread = try await dataProvider.getThread(uid: "018J_1_2", show_systems: "all")
             print(thread)
+        } catch {
+            print(error)
         }
     }
     
-    func printNearestStations() {
-        Task {
+    private func printNearestStations() async {
+        do {
             let stations = try await dataProvider.getNearestStations(lat: 59.864177, lng: 30.319163, distance: 50)
             print(stations)
+        } catch {
+            print(error)
         }
     }
     
-    func printNearestSettlement() {
-        Task {
+    private func printNearestSettlement() async {
+        do {
             let settlement = try await dataProvider.getNearestSettlement(lat: 59.864177, lng: 30.319163, distance: 50)
             print(settlement)
+        } catch {
+            print(error)
         }
     }
     
-    func printCarrierInfo() {
-        Task {
+    private func printCarrierInfo() async {
+        do {
             let carrier = try await dataProvider.getCarrierInfo(code: "TK", system: "iata")
             print(carrier)
+        } catch {
+            print(error)
         }
     }
     
-    func printStationsList() {
-        Task {
+    private func printStationsList() async {
+        do {
             let stationsList = try await dataProvider.getStationsList()
-            print(stationsList.countries?[0])
+            print(stationsList.countries?.first ?? "No countries in stationsList")
+        } catch {
+            print(error)
         }
     }
     
-    func printCopyrightInfo() {
+    private func printCopyrightInfo() async {
         Task {
             let copyright = try await dataProvider.getCopyrightInfo()
             print(copyright)
@@ -64,28 +78,28 @@ struct ContentView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Button("1. Расписание рейсов между станциями") {
-                printSearch()
+                Task { await printSearch() }
             }
             Button("2. Расписание рейсов по станции") {
-                printSchedule()
+                Task { await printSchedule() }
             }
             Button("3. Список станций следования") {
-                printThread()
+                Task { await printThread() }
             }
             Button("4. Список ближайших станций") {
-                printNearestStations()
+                Task { await printNearestStations() }
             }
             Button("5. Ближайший город") {
-                printNearestSettlement()
+                Task { await printNearestSettlement() }
             }
             Button("6. Информация о перевозчике") {
-                printCarrierInfo()
+                Task { await printCarrierInfo() }
             }
             Button("7. Список всех доступных станций") {
-                printStationsList()
+                Task { await printStationsList() }
             }
             Button("8. Копирайт Яндекс Расписаний") {
-                printCopyrightInfo()
+                Task { await printCopyrightInfo() }
             }
         }
         .padding()
