@@ -11,25 +11,18 @@ struct SettingsView: View {
                 
                 VStack(spacing: 16) {
                     VStack {
-                        HStack {
-                            Text("Тёмная тема")
-                                .font(.system(size: 17))
-                            Spacer()
-                            Toggle("", isOn: $isDarkThemed)
-                        }
-                        .frame(height: 60)
+                        Toggle("Тёмная тема", isOn: $isDarkThemed)
+                            .frame(height: 60)
                         
                         NavigationLink(destination: TermsWebView(), isActive: $isWebViewPresented) {
                             EmptyView()
                         }
-                        .accentColor(.ypBlack)
                         
                         Button(action: {
                             isWebViewPresented = true
                         }) {
                             HStack {
                                 Text("Пользовательское соглашение")
-                                    .font(.system(size: 17))
                                 Spacer()
                                 Image(systemName: "chevron.right")
                                     .imageScale(.large)
