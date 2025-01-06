@@ -2,7 +2,6 @@ import SwiftUI
 
 struct SettingsView: View {
     @AppStorage("isDarkThemed") var isDarkThemed: Bool = false
-    @State private var isWebViewPresented = false
     
     var body: some View {
         NavigationView {
@@ -14,22 +13,11 @@ struct SettingsView: View {
                         Toggle("Тёмная тема", isOn: $isDarkThemed)
                             .frame(height: 60)
                         
-                        NavigationLink(destination: TermsWebView(), isActive: $isWebViewPresented) {
-                            EmptyView()
+                        NavigationLink(destination: TermsWebView()) {
+                            ChevronRowView(text: "Пользовательское соглашение")
+                            
                         }
-                        
-                        Button(action: {
-                            isWebViewPresented = true
-                        }) {
-                            HStack {
-                                Text("Пользовательское соглашение")
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .imageScale(.large)
-                                    .font(.system(size: 17, weight: .semibold))
-                            }
-                            .frame(height: 60)
-                        }
+                        .frame(height: 60)
                     }
                     
                     Spacer()
