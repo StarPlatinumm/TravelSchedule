@@ -10,11 +10,20 @@ struct Station: Identifiable, Hashable {
     var name: String
 }
 
+enum Direction: String {
+    case from = "From"
+    case to = "To"
+}
+
 class StationSelectionVM: ObservableObject {
     private let dataProvider: DataProviderProtocol
-    @Published var path: [String] = []
-    @Published var toStation: String? = nil
-    @Published var fromStation: String? = nil
+    
+    @Published var toSettlement: Settlement? = nil
+    @Published var toStation: Station? = nil
+    @Published var fromSettlement: Settlement? = nil
+    @Published var fromStation: Station? = nil
+    
+    // TEST DATA
     @Published var data: [Settlement: [Station]] = [
         Settlement(name: "Москва"): [
             Station(name: "Киевский вокзал"),
@@ -32,5 +41,58 @@ class StationSelectionVM: ObservableObject {
         self.dataProvider = DataProvider()
     }
     
-    func swapFromTo() { (fromStation, toStation) = (toStation, fromStation) }
+    
+    func setSettlement(_ direction: Direction, value: Settlement) {
+        switch direction {
+        case .from:
+            self.fromSettlement = value
+        case .to:
+            self.toSettlement = value
+        }
+    }
+    
+    func setStation(_ direction: Direction, value: Station) {
+        switch direction {
+        case .from:
+            self.fromStation = value
+        case .to:
+            self.toStation = value
+        }
+    }
+    
+    func getFullFromStationName() -> String? {
+        if let fromSettlement, let fromStation {
+            return "\(fromSettlement.name) (\(fromStation.name))"
+        }
+        return nil
+    }
+    
+    func getFullToStationName() -> String? {
+        if let toSettlement, let toStation {
+            return "\(toSettlement.name) (\(toStation.name))"
+        }
+        return nil
+    }
+    
+    func getStations(direction: Direction) -> [Station] {
+        switch direction {
+        case .from:
+            return data[fromSettlement!] ?? []
+        case .to:
+            return data[toSettlement!] ?? []
+        }
+    }
+    
+    func swapFromTo() {
+        (fromSettlement, toSettlement) = (toSettlement, fromSettlement)
+        (fromStation, toStation) = (toStation, fromStation)
+    }
+    
+    func isAbleToSearchRouts() -> Bool {
+        return getFullFromStationName() != nil && getFullToStationName() != nil
+    }
+    
+    func searchRouts() {
+        //
+    }
 }

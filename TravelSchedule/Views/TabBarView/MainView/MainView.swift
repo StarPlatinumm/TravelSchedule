@@ -1,12 +1,8 @@
 import SwiftUI
 
 struct MainView: View {
-    @State var from: String?
-    @State var to: String?
-    
-    func onSearch() {
-        //
-    }
+    @EnvironmentObject var contentViewVM: ContentViewVM
+    @EnvironmentObject var stationSelectionVM: StationSelectionVM
     
     var body: some View {
         NavigationView {
@@ -28,11 +24,10 @@ struct MainView: View {
                     .frame(height: 188)
                     
                     RouteCard()
-                        .environmentObject(StationSelectionVM())
                         .frame(height: 128)
                     
-                    if from != nil && to != nil {
-                        Button("Найти", action: onSearch)
+                    if stationSelectionVM.isAbleToSearchRouts() {
+                        Button("Найти", action: stationSelectionVM.searchRouts)
                             .font(.system(size: 17, weight: .bold))
                             .padding(.vertical, 20)
                             .padding(.horizontal, 48)
