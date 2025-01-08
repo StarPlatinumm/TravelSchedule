@@ -12,15 +12,13 @@ struct SelectSettlementView: View {
             SearchBar(searchText: $searchText)
                 .frame(height: 100)
             List(Array(stationSelectionVM.data.keys)) { settlement in
-                ZStack(alignment: .leading) {
-                    ChevronRowView(text: settlement.name)
-                    NavigationLink(value: settlement) { EmptyView() }
-                }
-                .listRowSeparator(.hidden)
-                .onTapGesture {
-                    stationSelectionVM.setSettlement(direction, value: settlement)
-                    contentViewVM.path.append("SelectStation\(direction.rawValue)")
-                }
+                ChevronRowView(text: settlement.name)
+                    .listRowSeparator(.hidden)
+                    .onTapGesture {
+                        stationSelectionVM.setSettlement(direction, value: settlement)
+                        stationSelectionVM.setStation(direction, value: nil)
+                        contentViewVM.path.append("SelectStation\(direction.rawValue)")
+                    }
             }
             .navigationTitle("Выберите город")
             .listStyle(PlainListStyle())

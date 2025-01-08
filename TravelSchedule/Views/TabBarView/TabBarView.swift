@@ -12,13 +12,10 @@ struct TabBarView: View {
         NavigationStack(path: $contentViewVM.path) {
             TabView {
                 MainView()
-                    .environmentObject(contentViewVM)
-                    .environmentObject(stationSelectionVM)
                     .tabItem {
                         Label("", image: "tab-item-main")
                     }
                 SettingsView()
-                    .environmentObject(contentViewVM)
                     .tabItem {
                         Label("", image: "tab-item-settings")
                     }
@@ -28,20 +25,12 @@ struct TabBarView: View {
                 switch id {
                 case "SelectSettlementFrom":
                     SelectSettlementView(direction: .from)
-                        .environmentObject(contentViewVM)
-                        .environmentObject(stationSelectionVM)
                 case "SelectSettlementTo":
                     SelectSettlementView(direction: .to)
-                        .environmentObject(contentViewVM)
-                        .environmentObject(stationSelectionVM)
                 case "SelectStationFrom":
                     SelectStationView(direction: .from)
-                        .environmentObject(contentViewVM)
-                        .environmentObject(stationSelectionVM)
                 case "SelectStationTo":
                     SelectStationView(direction: .to)
-                        .environmentObject(contentViewVM)
-                        .environmentObject(stationSelectionVM)
                 case "TermsWebView":
                     TermsWebView()
                 default:
@@ -49,6 +38,8 @@ struct TabBarView: View {
                 }
             }
         }
+        .environmentObject(contentViewVM)
+        .environmentObject(stationSelectionVM)
     }
 }
 

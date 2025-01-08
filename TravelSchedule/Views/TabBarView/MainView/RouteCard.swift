@@ -37,7 +37,6 @@ struct RouteCard: View {
         .padding(16)
         .background(.ypBlue)
         .clipShape(RoundedRectangle(cornerRadius: 20))
-        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

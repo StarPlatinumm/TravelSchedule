@@ -42,7 +42,7 @@ class StationSelectionVM: ObservableObject {
     }
     
     
-    func setSettlement(_ direction: Direction, value: Settlement) {
+    func setSettlement(_ direction: Direction, value: Settlement?) {
         switch direction {
         case .from:
             self.fromSettlement = value
@@ -51,7 +51,7 @@ class StationSelectionVM: ObservableObject {
         }
     }
     
-    func setStation(_ direction: Direction, value: Station) {
+    func setStation(_ direction: Direction, value: Station?) {
         switch direction {
         case .from:
             self.fromStation = value
