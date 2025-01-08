@@ -18,6 +18,7 @@ struct TabBarView: View {
                         Label("", image: "tab-item-main")
                     }
                 SettingsView()
+                    .environmentObject(contentViewVM)
                     .tabItem {
                         Label("", image: "tab-item-settings")
                     }
@@ -41,6 +42,8 @@ struct TabBarView: View {
                     SelectStationView(direction: .to)
                         .environmentObject(contentViewVM)
                         .environmentObject(stationSelectionVM)
+                case "TermsWebView":
+                    TermsWebView()
                 default:
                     EmptyView()
                 }

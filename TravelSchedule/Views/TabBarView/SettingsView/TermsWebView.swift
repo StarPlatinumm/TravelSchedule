@@ -5,8 +5,8 @@ struct TermsWebView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 
     var body: some View {
-        CustomNavigationBar(text: "Пользовательское соглашение", backButtonAction: { self.presentationMode.wrappedValue.dismiss() } )
         TermsWebViewContent()
+            .navigationTitle("Пользовательское соглашение")
     }
 }
 
