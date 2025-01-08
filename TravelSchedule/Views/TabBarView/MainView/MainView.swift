@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct MainView: View {
-    @EnvironmentObject private var stationSelectionVM: StationSelectionVM
+    @EnvironmentObject private var vM: MainVM
     
     var body: some View {
         ZStack {
@@ -24,8 +24,8 @@ struct MainView: View {
                 RouteCard()
                     .frame(height: 128)
                 
-                if stationSelectionVM.isAbleToSearchRouts() {
-                    Button("Найти", action: stationSelectionVM.searchRouts)
+                if vM.isAbleToSearchRouts() {
+                    Button("Найти", action: vM.searchRouts)
                         .font(.system(size: 17, weight: .bold))
                         .padding(.vertical, 20)
                         .padding(.horizontal, 48)
@@ -43,6 +43,5 @@ struct MainView: View {
 
 #Preview {
     MainView()
-        .environmentObject(PathData())
-        .environmentObject(StationSelectionVM())
+        .environmentObject(MainVM())
 }

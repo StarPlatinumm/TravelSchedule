@@ -1,15 +1,14 @@
 import SwiftUI
 
 struct TabBarView: View {
-    @StateObject var pathData = PathData()
-    private var stationSelectionVM = StationSelectionVM()
+    @StateObject var vM = MainVM()
     
     init() {
         UITabBar.appearance().backgroundColor = UIColor.ypWhite
     }
     
     var body: some View {
-        NavigationStack(path: $pathData.path) {
+        NavigationStack(path: $vM.path) {
             TabView {
                 MainView()
                     .tabItem {
@@ -38,8 +37,7 @@ struct TabBarView: View {
                 }
             }
         }
-        .environmentObject(pathData)
-        .environmentObject(stationSelectionVM)
+        .environmentObject(vM)
     }
 }
 

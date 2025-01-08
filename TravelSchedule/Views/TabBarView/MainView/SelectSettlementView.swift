@@ -1,8 +1,7 @@
 import SwiftUI
 
 struct SelectSettlementView: View {
-    @EnvironmentObject private var pathData: PathData
-    @EnvironmentObject private var stationSelectionVM: StationSelectionVM
+    @EnvironmentObject private var vM: MainVM
     @State private var searchText = ""
     private let direction: Direction
     
@@ -14,13 +13,13 @@ struct SelectSettlementView: View {
         VStack(spacing: 0) {
             SearchBar(searchText: $searchText)
                 .padding(.bottom, 16)
-            List(Array(stationSelectionVM.data.keys)) { settlement in
+            List(Array(vM.data.keys)) { settlement in
                 ChevronRowView(text: settlement.name)
                     .listRowSeparator(.hidden)
                     .onTapGesture {
-                        stationSelectionVM.setSettlement(direction, value: settlement)
-                        stationSelectionVM.setStation(direction, value: nil)
-                        pathData.path.append("SelectStation\(direction.rawValue)")
+                        vM.setSettlement(direction, value: settlement)
+                        vM.setStation(direction, value: nil)
+                        vM.path.append("SelectStation\(direction.rawValue)")
                     }
             }
             .navigationTitle("Выбор города")
@@ -31,6 +30,5 @@ struct SelectSettlementView: View {
 
 #Preview {
     SelectSettlementView(direction: .to)
-        .environmentObject(PathData())
-        .environmentObject(StationSelectionVM())
+        .environmentObject(MainVM())
 }

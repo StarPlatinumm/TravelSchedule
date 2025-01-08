@@ -1,29 +1,28 @@
 import SwiftUI
 
 struct RouteCard: View {
-    @EnvironmentObject private var pathData: PathData
-    @EnvironmentObject private var stationSelectionVM: StationSelectionVM
+    @EnvironmentObject private var vM: MainVM
     
     var body: some View {
         HStack(spacing: 16) {
             VStack(alignment: .leading, spacing: 0) {
-                Text(stationSelectionVM.getFullFromStationName() ?? "Откуда")
+                Text(vM.getFullFromStationName() ?? "Откуда")
                     .lineLimit(1)
                     .padding(14)
-                    .foregroundColor(stationSelectionVM.fromStation == nil ? .ypGray : .ypBlack)
+                    .foregroundColor(vM.fromStation == nil ? .ypGray : .ypBlack)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .onTapGesture { pathData.path.append("SelectSettlementFrom") }
-                Text(stationSelectionVM.getFullToStationName() ?? "Куда")
+                    .onTapGesture { vM.path.append("SelectSettlementFrom") }
+                Text(vM.getFullToStationName() ?? "Куда")
                     .lineLimit(1)
                     .padding(14)
-                    .foregroundColor(stationSelectionVM.toStation == nil ? .ypGray : .ypBlack)
+                    .foregroundColor(vM.toStation == nil ? .ypGray : .ypBlack)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .onTapGesture { pathData.path.append("SelectSettlementTo") }
+                    .onTapGesture { vM.path.append("SelectSettlementTo") }
             }
             .background(.ypWhite)
             .clipShape(RoundedRectangle(cornerRadius: 20))
             
-            Button(action: stationSelectionVM.swapFromTo) {
+            Button(action: vM.swapFromTo) {
                 ZStack {
                     Circle()
                         .fill(.white)
@@ -44,8 +43,7 @@ struct RouteCard: View {
     VStack {
         RouteCard()
         .padding()
-        .environmentObject(PathData())
-        .environmentObject(StationSelectionVM())
+        .environmentObject(MainVM())
     }
     
 }

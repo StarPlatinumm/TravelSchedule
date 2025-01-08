@@ -15,8 +15,10 @@ enum Direction: String {
     case to = "To"
 }
 
-final class StationSelectionVM: ObservableObject {
+final class MainVM: ObservableObject {
     private let dataProvider: DataProviderProtocol
+    
+    @Published var path: [String] = []
     
     @Published var toSettlement: Settlement? = nil
     @Published var toStation: Station? = nil
@@ -41,6 +43,7 @@ final class StationSelectionVM: ObservableObject {
         self.dataProvider = DataProvider()
     }
     
+    // MARK: Stations
     
     func setSettlement(_ direction: Direction, value: Settlement?) {
         switch direction {
@@ -88,6 +91,7 @@ final class StationSelectionVM: ObservableObject {
         (fromStation, toStation) = (toStation, fromStation)
     }
     
+    // MARK: Routs
     func isAbleToSearchRouts() -> Bool {
         return getFullFromStationName() != nil && getFullToStationName() != nil
     }

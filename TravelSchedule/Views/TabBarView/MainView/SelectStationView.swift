@@ -1,8 +1,7 @@
 import SwiftUI
 
 struct SelectStationView: View {
-    @EnvironmentObject private var pathData: PathData
-    @EnvironmentObject private var stationSelectionVM: StationSelectionVM
+    @EnvironmentObject private var vM: MainVM
     @State private var searchText = ""
     private let direction: Direction
     
@@ -14,12 +13,12 @@ struct SelectStationView: View {
         VStack(spacing: 0) {
             SearchBar(searchText: $searchText)
                 .padding(.bottom, 16)
-            List(stationSelectionVM.getStations(direction: direction)) { item in
+            List(vM.getStations(direction: direction)) { item in
                 ChevronRowView(text: item.name)
                     .listRowSeparator(.hidden)
                     .onTapGesture {
-                        stationSelectionVM.setStation(direction, value: item)
-                        pathData.path = []
+                        vM.setStation(direction, value: item)
+                        vM.path = []
                     }
             }
             .listStyle(PlainListStyle())
@@ -30,6 +29,5 @@ struct SelectStationView: View {
 
 #Preview {
     SelectStationView(direction: .to)
-        .environmentObject(PathData())
-        .environmentObject(StationSelectionVM())
+        .environmentObject(MainVM())
 }
