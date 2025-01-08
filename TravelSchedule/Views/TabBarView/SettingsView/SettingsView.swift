@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @AppStorage("isDarkThemed") var isDarkThemed: Bool = false
-    @EnvironmentObject var contentViewVM: ContentViewVM
+    @AppStorage("isDarkThemed") private var isDarkThemed: Bool = false
+    @EnvironmentObject private var pathData: PathData
     
     var body: some View {
         ZStack {
@@ -16,7 +16,7 @@ struct SettingsView: View {
                     ChevronRowView(text: "Пользовательское соглашение")
                         .frame(height: 60)
                         .onTapGesture {
-                            contentViewVM.path.append("TermsWebView")
+                            pathData.path.append("TermsWebView")
                         }
                 }
                 
@@ -33,4 +33,6 @@ struct SettingsView: View {
 
 #Preview {
     SettingsView()
+        .environmentObject(PathData())
+        .environmentObject(StationSelectionVM())
 }

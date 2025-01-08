@@ -1,7 +1,11 @@
 import SwiftUI
 
 struct ChevronRowView: View {
-    let text: String
+    private let text: String
+    
+    init(text: String) {
+        self.text = text
+    }
     
     var body: some View {
         HStack {
@@ -12,4 +16,9 @@ struct ChevronRowView: View {
                 .font(.system(size: 17, weight: .semibold))
         }
     }
+}
+
+#Preview {
+    ChevronRowView(text: "Test")
+        .padding()
 }

@@ -15,7 +15,7 @@ enum Direction: String {
     case to = "To"
 }
 
-class StationSelectionVM: ObservableObject {
+final class StationSelectionVM: ObservableObject {
     private let dataProvider: DataProviderProtocol
     
     @Published var toSettlement: Settlement? = nil

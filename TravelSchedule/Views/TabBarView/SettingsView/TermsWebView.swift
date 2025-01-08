@@ -2,8 +2,6 @@ import SwiftUI
 import WebKit
 
 struct TermsWebView: View {
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-
     var body: some View {
         TermsWebViewContent()
             .navigationTitle("Пользовательское соглашение")

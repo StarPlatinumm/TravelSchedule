@@ -1,8 +1,7 @@
 import SwiftUI
 
 struct MainView: View {
-    @EnvironmentObject var contentViewVM: ContentViewVM
-    @EnvironmentObject var stationSelectionVM: StationSelectionVM
+    @EnvironmentObject private var stationSelectionVM: StationSelectionVM
     
     var body: some View {
         ZStack {
@@ -44,4 +43,6 @@ struct MainView: View {
 
 #Preview {
     MainView()
+        .environmentObject(PathData())
+        .environmentObject(StationSelectionVM())
 }

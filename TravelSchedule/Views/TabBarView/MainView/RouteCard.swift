@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct RouteCard: View {
-    @EnvironmentObject var contentViewVM: ContentViewVM
-    @EnvironmentObject var stationSelectionVM: StationSelectionVM
+    @EnvironmentObject private var pathData: PathData
+    @EnvironmentObject private var stationSelectionVM: StationSelectionVM
     
     var body: some View {
         HStack(spacing: 16) {
@@ -12,13 +12,13 @@ struct RouteCard: View {
                     .padding(14)
                     .foregroundColor(stationSelectionVM.fromStation == nil ? .ypGray : .ypBlack)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .onTapGesture { contentViewVM.path.append("SelectSettlementFrom") }
+                    .onTapGesture { pathData.path.append("SelectSettlementFrom") }
                 Text(stationSelectionVM.getFullToStationName() ?? "Куда")
                     .lineLimit(1)
                     .padding(14)
                     .foregroundColor(stationSelectionVM.toStation == nil ? .ypGray : .ypBlack)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .onTapGesture { contentViewVM.path.append("SelectSettlementTo") }
+                    .onTapGesture { pathData.path.append("SelectSettlementTo") }
             }
             .background(.ypWhite)
             .clipShape(RoundedRectangle(cornerRadius: 20))
@@ -44,6 +44,7 @@ struct RouteCard: View {
     VStack {
         RouteCard()
         .padding()
+        .environmentObject(PathData())
         .environmentObject(StationSelectionVM())
     }
     

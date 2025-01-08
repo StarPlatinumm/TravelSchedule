@@ -6,9 +6,9 @@ enum ErrorType {
 }
 
 struct ErrorView: View {
-    let errorType: ErrorType
-    let errorText: String
-    let errorImageName: String
+    private let errorType: ErrorType
+    private let errorText: String
+    private let errorImageName: String
     
     init(errorType: ErrorType) {
         self.errorType = errorType

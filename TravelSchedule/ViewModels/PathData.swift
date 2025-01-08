@@ -1,5 +1,5 @@
 import SwiftUI
 
-class ContentViewVM: ObservableObject {
+final class PathData: ObservableObject {
     @Published var path: [String] = []
 }

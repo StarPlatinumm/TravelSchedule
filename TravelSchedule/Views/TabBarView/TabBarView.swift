@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TabBarView: View {
-    @StateObject private var contentViewVM = ContentViewVM()
+    @StateObject var pathData = PathData()
     private var stationSelectionVM = StationSelectionVM()
     
     init() {
@@ -9,7 +9,7 @@ struct TabBarView: View {
     }
     
     var body: some View {
-        NavigationStack(path: $contentViewVM.path) {
+        NavigationStack(path: $pathData.path) {
             TabView {
                 MainView()
                     .tabItem {
@@ -38,7 +38,7 @@ struct TabBarView: View {
                 }
             }
         }
-        .environmentObject(contentViewVM)
+        .environmentObject(pathData)
         .environmentObject(stationSelectionVM)
     }
 }
