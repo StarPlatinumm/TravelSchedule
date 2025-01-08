@@ -28,6 +28,7 @@ struct MainView: View {
                     .frame(height: 188)
                     
                     RouteCard()
+                        .environmentObject(StationSelectionVM())
                         .frame(height: 128)
                     
                     if from != nil && to != nil {

@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @AppStorage("isDarkThemed") var isDarkThemed: Bool = false
+    @State var isPresenting: Bool = false
     
     var body: some View {
         NavigationView {
@@ -13,11 +14,12 @@ struct SettingsView: View {
                         Toggle("Тёмная тема", isOn: $isDarkThemed)
                             .frame(height: 60)
                         
-                        NavigationLink(destination: TermsWebView()) {
-                            ChevronRowView(text: "Пользовательское соглашение")
-                            
-                        }
-                        .frame(height: 60)
+                        ChevronRowView(text: "Пользовательское соглашение")
+                            .onTapGesture { isPresenting = true }
+                            .fullScreenCover(isPresented: $isPresenting) {
+                                TermsWebView()
+                            }
+                            .frame(height: 60)
                     }
                     
                     Spacer()

@@ -1,40 +1,35 @@
 import SwiftUI
 
 struct SelectStationView: View {
-    @State private var searchText = ""
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    
-    var btnBack : some View {
-        Button(action: {
-            self.presentationMode.wrappedValue.dismiss()
-        }) {
-            Image(systemName: "chevron.left")
-                .imageScale(.large)
-                .font(.system(size: 17, weight: .semibold))
-        }
-    }
+    @EnvironmentObject var vM: StationSelectionVM
+    @State private var searchText = ""
+    @State var stations: [Station]
     
     var body: some View {
-        NavigationView {
-            VStack(spacing: 0) {
-                SearchBar(searchText: $searchText)
-                    .frame(height: 100)
-                List {
-                    ForEach(0..<100) { index in
-                        ChevronRowView(text: "Item \(index)")
-                    }
+        VStack(spacing: 0) {
+            SearchBar(searchText: $searchText)
+                .frame(height: 100)
+            List(stations) { item in
+                ChevronRowView(text: item.name)
                     .listRowSeparator(.hidden)
-                }
-                .listStyle(PlainListStyle())
+                    .onTapGesture {
+                        vM.fromStation = "\(vM.fromStation) (\(item.name))"
+                        self.presentationMode.wrappedValue.dismiss()
+                    }
             }
+            .listStyle(PlainListStyle())
         }
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden()
-        .navigationBarItems(leading: btnBack)
-        .navigationTitle("Выберите город")
     }
 }
 
 #Preview {
-    SelectStationView()
+    SelectStationView(stations: [
+        Station(name: "Киевский вокзал"),
+        Station(name: "Курский вокзал"),
+        Station(name: "Ярославский вокзал"),
+        Station(name: "Белорусский вокзал"),
+        Station(name: "Савёловский вокзал")
+    ])
+    .environmentObject(StationSelectionVM())
 }

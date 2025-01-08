@@ -2,10 +2,6 @@ import OpenAPIRuntime
 import OpenAPIURLSession
 import Foundation
 
-typealias NearestStations = Components.Schemas.Stations
-typealias NearestSettlement = Components.Schemas.Settlement
-typealias Carrier = Components.Schemas.Settlement
-
 protocol DataProviderProtocol {
     func getSearch(from: String, to: String, date: String?, show_systems: String?, transport_types: String?, system: String?, offset: Int?, limit: Int?, result_timezone: String?, add_days_mask: Bool?, transfers: Bool?) async throws -> Components.Schemas.SearchSchema
     func getSchedule(station: String, date: String?, transport_types: String?, system: String?, show_systems: String?, result_timezone: String?, event: String?, direction: String?) async throws -> Components.Schemas.ScheduleSchema

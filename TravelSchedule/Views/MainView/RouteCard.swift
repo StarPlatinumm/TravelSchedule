@@ -1,35 +1,35 @@
 import SwiftUI
 
 struct RouteCard: View {
-    @State var from: String?
-    @State var to: String?
-    
-    func swapFromTo() { (from, to) = (to, from) }
+    @State var isPresenting: Bool = false
+    @EnvironmentObject var vM: StationSelectionVM
     
     var body: some View {
         HStack(spacing: 16) {
             VStack(alignment: .leading, spacing: 0) {
-                NavigationLink(destination: SelectStationView()) {
-                    Text(from ?? "Откуда")
-                        .lineLimit(1)
-                        .padding(14)
-                        .foregroundColor(from == nil ? .ypGray : .ypBlack)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                }
-                NavigationLink(destination: SelectStationView()) {
-                    Text(to ?? "Куда")
-                        .lineLimit(1)
-                        .padding(14)
-                        .foregroundColor(to == nil ? .ypGray : .ypBlack)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                }
+                Text(vM.fromStation ?? "Откуда")
+                    .lineLimit(1)
+                    .padding(14)
+                    .foregroundColor(vM.fromStation == nil ? .ypGray : .ypBlack)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .onTapGesture { isPresenting = true }
+                    .fullScreenCover(isPresented: $isPresenting) {
+                        SelectSettlementView()
+                    }
+                Text(vM.toStation ?? "Куда")
+                    .lineLimit(1)
+                    .padding(14)
+                    .foregroundColor(vM.toStation == nil ? .ypGray : .ypBlack)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .onTapGesture { isPresenting = true }
+                    .fullScreenCover(isPresented: $isPresenting) {
+                        SelectSettlementView()
+                    }
             }
             .background(.ypWhite)
             .clipShape(RoundedRectangle(cornerRadius: 20))
             
-            Button(action: swapFromTo) {
+            Button(action: vM.swapFromTo) {
                 ZStack {
                     Circle()
                         .fill(.white)
@@ -43,15 +43,15 @@ struct RouteCard: View {
         .padding(16)
         .background(.ypBlue)
         .clipShape(RoundedRectangle(cornerRadius: 20))
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
 #Preview {
     VStack {
-        RouteCard(
-            to: "Санкт-Петербург (Балтийский вокзал)"
-        )
+        RouteCard()
         .padding()
+        .environmentObject(StationSelectionVM())
     }
     
 }
