@@ -21,7 +21,7 @@ struct MainView: View {
                 }
                 .frame(height: 188)
                 
-                RouteCard()
+                DestinationCardView()
                     .frame(height: 128)
                 
                 if vM.isAbleToSearchRouts() {

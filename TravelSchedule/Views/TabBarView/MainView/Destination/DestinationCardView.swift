@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct RouteCard: View {
+struct DestinationCardView: View {
     @EnvironmentObject private var vM: MainVM
     
     var body: some View {
@@ -41,9 +41,9 @@ struct RouteCard: View {
 
 #Preview {
     VStack {
-        RouteCard()
-        .padding()
-        .environmentObject(MainVM())
+        DestinationCardView()
+            .padding()
+            .environmentObject(MainVM())
     }
     
 }
