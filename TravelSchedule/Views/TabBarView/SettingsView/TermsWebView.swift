@@ -7,7 +7,7 @@ struct TermsWebView: View {
             Color.ypWhite.edgesIgnoringSafeArea(.all)
             
             TermsWebViewContent()
-                .edgesIgnoringSafeArea(.all)
+                .edgesIgnoringSafeArea(.bottom)
                 .navigationTitle("Пользовательское соглашение")
         }
     }
