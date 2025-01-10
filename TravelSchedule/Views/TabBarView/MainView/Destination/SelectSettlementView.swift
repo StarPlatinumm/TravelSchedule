@@ -10,20 +10,25 @@ struct SelectSettlementView: View {
     }
     
     var body: some View {
-        VStack(spacing: 0) {
-            SearchBar(searchText: $searchText)
-                .padding(.bottom, 16)
-            List(Array(vM.data.keys)) { settlement in
-                ChevronRowView(text: settlement.name)
-                    .listRowSeparator(.hidden)
-                    .onTapGesture {
-                        vM.setSettlement(direction, value: settlement)
-                        vM.setStation(direction, value: nil)
-                        vM.path.append("SelectStation\(direction.rawValue)")
-                    }
+        ZStack {
+            Color.ypWhite.edgesIgnoringSafeArea(.all)
+            
+            VStack(spacing: 0) {
+                SearchBar(searchText: $searchText)
+                    .padding(.bottom, 16)
+                List(Array(vM.data.keys)) { settlement in
+                    ChevronRowView(text: settlement.name)
+                        .listRowSeparator(.hidden)
+                        .onTapGesture {
+                            vM.setSettlement(direction, value: settlement)
+                            vM.setStation(direction, value: nil)
+                            vM.path.append("SelectStation\(direction.rawValue)")
+                        }
+                }
+                .scrollIndicators(.hidden)
+                .navigationTitle("Выбор города")
+                .listStyle(PlainListStyle())
             }
-            .navigationTitle("Выбор города")
-            .listStyle(PlainListStyle())
         }
     }
 }

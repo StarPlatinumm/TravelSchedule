@@ -25,12 +25,14 @@ struct MainView: View {
                     .frame(height: 128)
                 
                 if vM.isAbleToSearchRouts() {
-                    Button("Найти", action: vM.searchRouts)
+                    Button("Найти", action: {
+                        vM.path.append("RoutsList")
+                    })
                         .font(.system(size: 17, weight: .bold))
                         .padding(.vertical, 20)
                         .padding(.horizontal, 48)
                         .background(.ypBlue)
-                        .foregroundStyle(.ypWhite)
+                        .foregroundStyle(.white)
                         .clipShape(RoundedRectangle(cornerRadius: 20))
                 }
                 

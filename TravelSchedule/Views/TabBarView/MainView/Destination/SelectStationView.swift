@@ -10,19 +10,24 @@ struct SelectStationView: View {
     }
     
     var body: some View {
-        VStack(spacing: 0) {
-            SearchBar(searchText: $searchText)
-                .padding(.bottom, 16)
-            List(vM.getStations(direction: direction)) { item in
-                ChevronRowView(text: item.name)
-                    .listRowSeparator(.hidden)
-                    .onTapGesture {
-                        vM.setStation(direction, value: item)
-                        vM.path = []
-                    }
+        ZStack {
+            Color.ypWhite.edgesIgnoringSafeArea(.all)
+            
+            VStack(spacing: 0) {
+                SearchBar(searchText: $searchText)
+                    .padding(.bottom, 16)
+                List(vM.getStations(direction: direction)) { item in
+                    ChevronRowView(text: item.name)
+                        .listRowSeparator(.hidden)
+                        .onTapGesture {
+                            vM.setStation(direction, value: item)
+                            vM.path = []
+                        }
+                }
+                .scrollIndicators(.hidden)
+                .listStyle(PlainListStyle())
+                .navigationTitle("Выбор станции")
             }
-            .listStyle(PlainListStyle())
-            .navigationTitle("Выбор станции")
         }
     }
 }

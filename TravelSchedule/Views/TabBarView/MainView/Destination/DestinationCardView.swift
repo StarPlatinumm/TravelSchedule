@@ -9,17 +9,17 @@ struct DestinationCardView: View {
                 Text(vM.getFullFromStationName() ?? "Откуда")
                     .lineLimit(1)
                     .padding(14)
-                    .foregroundColor(vM.fromStation == nil ? .ypGray : .ypBlack)
+                    .foregroundColor(vM.fromStation == nil ? .ypGray : .black)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .onTapGesture { vM.path.append("SelectSettlementFrom") }
                 Text(vM.getFullToStationName() ?? "Куда")
                     .lineLimit(1)
                     .padding(14)
-                    .foregroundColor(vM.toStation == nil ? .ypGray : .ypBlack)
+                    .foregroundColor(vM.toStation == nil ? .ypGray : .black)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .onTapGesture { vM.path.append("SelectSettlementTo") }
             }
-            .background(.ypWhite)
+            .background(.white)
             .clipShape(RoundedRectangle(cornerRadius: 20))
             
             Button(action: vM.swapFromTo) {

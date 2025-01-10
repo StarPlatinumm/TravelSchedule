@@ -6,7 +6,7 @@ struct SettingsView: View {
     
     var body: some View {
         ZStack {
-            Color.white.edgesIgnoringSafeArea(.all)
+            Color.ypWhite.edgesIgnoringSafeArea(.all)
             
             VStack(spacing: 16) {
                 VStack {

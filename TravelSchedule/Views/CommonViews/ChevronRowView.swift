@@ -15,6 +15,7 @@ struct ChevronRowView: View {
                 .imageScale(.large)
                 .font(.system(size: 17, weight: .semibold))
         }
+        .listRowBackground(Color.ypWhite)
     }
 }
 

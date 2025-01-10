@@ -27,21 +27,21 @@ struct SearchBar: View {
                         Image(systemName: "magnifyingglass")
                             .resizable()
                             .frame(width: 17, height: 17)
-                            .foregroundColor(.gray)
+                            .foregroundColor(.ypLightGray)
                         
                         Spacer()
                         
                         if isSearching && searchText.count > 0 {
                             Button(action: { searchText = "" }, label: {
                                 Image(systemName: "xmark.circle.fill")
-                                    .foregroundColor(.gray)
+                                    .foregroundColor(.ypLightGray)
                                     .padding(.vertical)
                             })
                             
                         }
                         
                     }.padding(.horizontal, 10)
-                        .foregroundColor(.gray)
+                        .foregroundColor(.ypLightGray)
                 )
             }
             .frame(height: 37)

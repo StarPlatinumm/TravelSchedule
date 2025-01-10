@@ -2,6 +2,7 @@ import SwiftUI
 
 struct TabBarView: View {
     @StateObject var vM = MainVM()
+    @AppStorage("isDarkThemed") private var isDarkThemed: Bool = false
     
     init() {
         UITabBar.appearance().backgroundColor = UIColor.ypWhite
@@ -19,7 +20,7 @@ struct TabBarView: View {
                         Label("", image: "tab-item-settings")
                     }
             }
-            .accentColor(.ypBlack)
+//            .accentColor(.ypBlack)
             .navigationDestination(for: String.self) { id in
                 switch id {
                 case "SelectSettlementFrom":
@@ -30,6 +31,12 @@ struct TabBarView: View {
                     SelectStationView(direction: .from)
                 case "SelectStationTo":
                     SelectStationView(direction: .to)
+                case "RoutsList":
+                    RoutsListView()
+                case "RoutsFilters":
+                    RoutsFiltersView()
+                case "CarrierInfo":
+                    CarrierInfoView()
                 case "TermsWebView":
                     TermsWebView()
                 default:
@@ -37,6 +44,8 @@ struct TabBarView: View {
                 }
             }
         }
+        .accentColor(.ypBlack)
+        .environment(\.colorScheme, isDarkThemed ? .dark : .light)
         .environmentObject(vM)
     }
 }

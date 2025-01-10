@@ -3,8 +3,13 @@ import WebKit
 
 struct TermsWebView: View {
     var body: some View {
-        TermsWebViewContent()
-            .navigationTitle("Пользовательское соглашение")
+        ZStack {
+            Color.ypWhite.edgesIgnoringSafeArea(.all)
+            
+            TermsWebViewContent()
+                .edgesIgnoringSafeArea(.all)
+                .navigationTitle("Пользовательское соглашение")
+        }
     }
 }
 
@@ -18,4 +23,9 @@ struct TermsWebViewContent: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: WKWebView, context: Context) {}
+}
+
+#Preview {
+    TermsWebView()
+        .environmentObject(MainVM())
 }
