@@ -10,24 +10,29 @@ struct CarrierInfoView: View {
             VStack(alignment: .leading, spacing: 28) {
                 HStack {
                     Spacer()
-                    AsyncImage(url: URL(string: "https://yastat.net/s3/rasp/media/data/company/logo/thy_kopya.jpg"))
-                        .clipShape(RoundedRectangle(cornerRadius: 24))
+                    AsyncImage(url: URL(string: vM.currentCarrier?.logo ?? "")) { image in
+                        image.resizable()
+                    } placeholder: {
+                        ProgressView()
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: 250)
+                    .clipShape(RoundedRectangle(cornerRadius: 24))
                     Spacer()
                 }
                 
-                Text("ОАО \"РЖД\"")
+                Text(vM.currentCarrier?.title ?? "-")
                     .font(.system(size: 24, weight: .bold))
                 
                 VStack(alignment: .leading, spacing: 0) {
                     Text("E-mail")
-                    Text("info@rzhd.ru")
+                    Text(vM.currentCarrier?.email ?? "-")
                         .font(.system(size: 12))
                         .foregroundColor(.ypBlue)
                 }
                 
                 VStack(alignment: .leading, spacing: 0) {
                     Text("Телефон")
-                    Text("+7 (904) 329-27-71")
+                    Text(vM.currentCarrier?.phone ?? "-")
                         .font(.system(size: 12))
                         .foregroundColor(.ypBlue)
                 }

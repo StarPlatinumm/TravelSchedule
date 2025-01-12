@@ -20,7 +20,6 @@ struct TabBarView: View {
                         Label("", image: "tab-item-settings")
                     }
             }
-//            .accentColor(.ypBlack)
             .navigationDestination(for: String.self) { id in
                 switch id {
                 case "SelectSettlementFrom":
@@ -31,10 +30,10 @@ struct TabBarView: View {
                     SelectStationView(direction: .from)
                 case "SelectStationTo":
                     SelectStationView(direction: .to)
-                case "RoutsList":
-                    RoutsListView()
-                case "RoutsFilters":
-                    RoutsFiltersView()
+                case "RoutesList":
+                    RoutesListView()
+                case "RoutesFilters":
+                    RoutesFiltersView()
                 case "CarrierInfo":
                     CarrierInfoView()
                 case "TermsWebView":

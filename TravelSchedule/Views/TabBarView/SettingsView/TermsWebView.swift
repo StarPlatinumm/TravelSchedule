@@ -27,5 +27,4 @@ struct TermsWebViewContent: UIViewRepresentable {
 
 #Preview {
     TermsWebView()
-        .environmentObject(MainVM())
 }

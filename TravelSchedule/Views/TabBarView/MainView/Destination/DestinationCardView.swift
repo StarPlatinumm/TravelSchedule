@@ -6,17 +6,9 @@ struct DestinationCardView: View {
     var body: some View {
         HStack(spacing: 16) {
             VStack(alignment: .leading, spacing: 0) {
-                Text(vM.getFullFromStationName() ?? "Откуда")
-                    .lineLimit(1)
-                    .padding(14)
-                    .foregroundColor(vM.fromStation == nil ? .ypGray : .black)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                DestinationCardRowView(text: vM.fromStation?.title, placeholder: "Откуда")
                     .onTapGesture { vM.path.append("SelectSettlementFrom") }
-                Text(vM.getFullToStationName() ?? "Куда")
-                    .lineLimit(1)
-                    .padding(14)
-                    .foregroundColor(vM.toStation == nil ? .ypGray : .black)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                DestinationCardRowView(text: vM.toStation?.title, placeholder: "Куда")
                     .onTapGesture { vM.path.append("SelectSettlementTo") }
             }
             .background(.white)
@@ -45,5 +37,4 @@ struct DestinationCardView: View {
             .padding()
             .environmentObject(MainVM())
     }
-    
 }

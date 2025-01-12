@@ -8,12 +8,15 @@ struct ChevronRowView: View {
     }
     
     var body: some View {
-        HStack {
-            Text(text)
-            Spacer()
-            Image(systemName: "chevron.right")
-                .imageScale(.large)
-                .font(.system(size: 17, weight: .semibold))
+        ZStack {
+            Color.ypWhite.edgesIgnoringSafeArea(.all)
+            HStack {
+                Text(text)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Image(systemName: "chevron.right")
+                    .imageScale(.large)
+                    .font(.system(size: 17, weight: .semibold))
+            }
         }
         .listRowBackground(Color.ypWhite)
     }

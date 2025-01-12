@@ -27,7 +27,7 @@ struct SearchBar: View {
                         Image(systemName: "magnifyingglass")
                             .resizable()
                             .frame(width: 17, height: 17)
-                            .foregroundColor(.ypLightGray)
+                            .foregroundColor(.ypGray)
                         
                         Spacer()
                         

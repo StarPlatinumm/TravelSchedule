@@ -2,11 +2,21 @@ import SwiftUI
 
 struct SelectStationView: View {
     @EnvironmentObject private var vM: MainVM
-    @State private var searchText = ""
+    @State private var searchText: String = ""
     private let direction: Direction
     
     init(direction: Direction) {
         self.direction = direction
+    }
+    
+    var filteredStations: [Components.Schemas.Station]? {
+        if searchText.isEmpty {
+            return vM.currentStations
+        } else {
+            return vM.currentStations?.filter {
+                $0.title?.lowercased().contains(searchText.lowercased()) ?? false
+            }
+        }
     }
     
     var body: some View {
@@ -16,17 +26,19 @@ struct SelectStationView: View {
             VStack(spacing: 0) {
                 SearchBar(searchText: $searchText)
                     .padding(.bottom, 16)
-                List(vM.getStations(direction: direction)) { item in
-                    ChevronRowView(text: item.name)
-                        .listRowSeparator(.hidden)
-                        .onTapGesture {
-                            vM.setStation(direction, value: item)
-                            vM.path = []
-                        }
+                if let stations = filteredStations {
+                    List(stations) { item in
+                        ChevronRowView(text: item.title ?? "")
+                            .listRowSeparator(.hidden)
+                            .onTapGesture {
+                                vM.setStation(direction, value: item)
+                                vM.path = []
+                            }
+                    }
+                    .scrollIndicators(.hidden)
+                    .listStyle(PlainListStyle())
+                    .navigationTitle("Выбор станции")
                 }
-                .scrollIndicators(.hidden)
-                .listStyle(PlainListStyle())
-                .navigationTitle("Выбор станции")
             }
         }
     }

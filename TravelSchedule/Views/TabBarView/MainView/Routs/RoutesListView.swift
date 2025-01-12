@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct RoutsListView: View {
+struct RoutesListView: View {
     @EnvironmentObject private var vM: MainVM
     
     var body: some View {
@@ -8,31 +8,36 @@ struct RoutsListView: View {
             Color.ypWhite.edgesIgnoringSafeArea(.all)
             
             VStack(spacing: 16) {
-                Text("Москва (Ярославский вокзал) → Санкт Петербург (Балтийский вокзал)")
+                Text("\(vM.fromStation?.title ?? "") → \(vM.toStation?.title ?? "")")
                     .font(.system(size: 24, weight: .bold))
-                ZStack {
-                    List {
-                        ForEach(0..<10) { index in
-                            RoutCardView()
-                                .listRowSeparator(.hidden)
-                                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
-                                .onTapGesture {
-                                    vM.path.append("CarrierInfo")
-                                }
-                        }
+                if vM.isLoading {
+                    Spacer()
+                    ProgressView()
+                    Spacer()
+                } else if let routes = vM.filteredRoutes {
+                    List(routes) { route in
+                        RouteCardView(route: route)
+                            .listRowSeparator(.hidden)
+                            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
+                            .onTapGesture {
+                                vM.currentCarrier = route.thread?.carrier
+                                vM.path.append("CarrierInfo")
+                            }
                     }
                     .scrollIndicators(.hidden)
                     .listStyle(PlainListStyle())
                     .safeAreaInset(edge: .bottom) {
                         Button(action: {
-                            vM.path.append("RoutsFilters")
+                            vM.path.append("RoutesFilters")
                         }) {
                             HStack {
                                 Text("Уточнить время")
                                     .font(.system(size: 17, weight: .bold))
-                                Circle()
-                                    .frame(width: 8, height: 8)
-                                    .foregroundColor(.ypRed)
+                                if !vM.departureTimeSelected.isEmpty {
+                                    Circle()
+                                        .frame(width: 8, height: 8)
+                                        .foregroundColor(.ypRed)
+                                }
                             }
                         }
                         .frame(maxWidth: .infinity, minHeight: 60)
@@ -43,7 +48,6 @@ struct RoutsListView: View {
                         .padding(.bottom, 8)
                     }
                 }
-                
             }
             .padding()
         }
@@ -51,6 +55,6 @@ struct RoutsListView: View {
 }
 
 #Preview {
-    RoutsListView()
+    RoutesListView()
         .environmentObject(MainVM())
 }

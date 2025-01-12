@@ -24,16 +24,20 @@ struct MainView: View {
                 DestinationCardView()
                     .frame(height: 128)
                 
-                if vM.isAbleToSearchRouts() {
+                if vM.isAbleToSearchRoutes() {
                     Button("Найти", action: {
-                        vM.path.append("RoutsList")
+                        vM.isLoading = true
+                        Task {
+                            await vM.searchRoutes()
+                        }
+                        vM.path.append("RoutesList")
                     })
-                        .font(.system(size: 17, weight: .bold))
-                        .padding(.vertical, 20)
-                        .padding(.horizontal, 48)
-                        .background(.ypBlue)
-                        .foregroundStyle(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .font(.system(size: 17, weight: .bold))
+                    .padding(.vertical, 20)
+                    .padding(.horizontal, 48)
+                    .background(.ypBlue)
+                    .foregroundStyle(.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
                 }
                 
                 Spacer()
