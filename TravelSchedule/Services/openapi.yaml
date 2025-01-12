@@ -53,6 +53,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SearchResults'
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /v3.0/stations_list/:
     get:
       tags:
@@ -67,14 +79,40 @@ paths:
           schema:
             type: string
       responses:
-        '200':
-          description: OK
+        "200":
+          description: success
           content:
             text/html:
               schema:
                 $ref: '#/components/schemas/StationsList'
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            error_code:
+              type: string
+            http_code:
+              type: integer
+            request:
+              type: string
+            text:
+              type: string
     SearchResults:
       type: object
       properties:

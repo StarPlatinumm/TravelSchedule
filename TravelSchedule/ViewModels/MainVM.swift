@@ -65,9 +65,17 @@ final class MainVM: ObservableObject {
                 self.allSettlements = settlements
                 self.isLoading = false
             }
-        } catch {
-            print("Error fetching stations: \(error)")
-        }
+        } catch ErrorType.serverError {
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                path = ["ServerError"]
+            }
+        } catch ErrorType.noInternet {
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                path = ["NoInternetError"]
+            }
+        } catch {}
     }
     
     func setSettlement(_ direction: Direction, value: Components.Schemas.Settlement?) {
@@ -124,9 +132,17 @@ final class MainVM: ObservableObject {
                 self.filteredRoutes = routes
                 self.isLoading = false
             }
-        } catch {
-            print("Error fetching stations: \(error)")
-        }
+        } catch ErrorType.serverError {
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                path = ["ServerError"]
+            }
+        } catch ErrorType.noInternet {
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                path = ["NoInternetError"]
+            }
+        } catch {}
     }
     
     func filterRoutes() {

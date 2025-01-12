@@ -38,6 +38,10 @@ struct TabBarView: View {
                     CarrierInfoView()
                 case "TermsWebView":
                     TermsWebView()
+                case "ServerError":
+                    ErrorView(errorType: .serverError)
+                case "NoInternetError":
+                    ErrorView(errorType: .noInternet)
                 default:
                     EmptyView()
                 }

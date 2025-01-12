@@ -1,10 +1,5 @@
 import SwiftUI
 
-enum ErrorType {
-    case noInternet
-    case serverError
-}
-
 struct ErrorView: View {
     private let errorType: ErrorType
     private let errorText: String
