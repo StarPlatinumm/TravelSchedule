@@ -47,6 +47,8 @@ struct RoutesListView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 20))
                         .padding(.bottom, 8)
                     }
+                } else {
+                    NotFoundTextView(text: "Вариантов нет")
                 }
             }
             .padding()

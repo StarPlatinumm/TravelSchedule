@@ -9,13 +9,13 @@ struct SelectStationView: View {
         self.direction = direction
     }
     
-    var filteredStations: [Components.Schemas.Station]? {
+    var stations: [Components.Schemas.Station] {
         if searchText.isEmpty {
-            return vM.currentStations
+            return vM.currentStations ?? []
         } else {
             return vM.currentStations?.filter {
                 $0.title?.lowercased().contains(searchText.lowercased()) ?? false
-            }
+            } ?? []
         }
     }
     
@@ -26,7 +26,7 @@ struct SelectStationView: View {
             VStack(spacing: 0) {
                 SearchBar(searchText: $searchText)
                     .padding(.bottom, 16)
-                if let stations = filteredStations {
+                if !stations.isEmpty {
                     List(stations) { item in
                         ChevronRowView(text: item.title ?? "")
                             .listRowSeparator(.hidden)
@@ -38,6 +38,8 @@ struct SelectStationView: View {
                     .scrollIndicators(.hidden)
                     .listStyle(PlainListStyle())
                     .navigationTitle("Выбор станции")
+                } else {
+                    NotFoundTextView(text: "Станция не найдена")
                 }
             }
         }

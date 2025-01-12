@@ -9,13 +9,13 @@ struct SelectSettlementView: View {
         self.direction = direction
     }
     
-    var filteredSettlements: [Components.Schemas.Settlement]? {
+    var settlements: [Components.Schemas.Settlement] {
         if searchText.isEmpty {
-            return vM.allSettlements
+            return vM.allSettlements ?? []
         } else {
             return vM.allSettlements?.filter {
                 $0.title?.lowercased().contains(searchText.lowercased()) ?? false
-            }
+            } ?? []
         }
     }
     
@@ -30,21 +30,21 @@ struct SelectSettlementView: View {
                     Spacer()
                     ProgressView()
                     Spacer()
-                } else {
-                    if let settlements = filteredSettlements {
-                        List(settlements) { settlement in
-                            ChevronRowView(text: settlement.title ?? "")
-                                .listRowSeparator(.hidden)
-                                .onTapGesture {
-                                    vM.setSettlement(direction, value: settlement)
-                                    vM.setStation(direction, value: nil)
-                                    vM.path.append("SelectStation\(direction.rawValue)")
-                                }
-                        }
-                        .scrollIndicators(.hidden)
-                        .navigationTitle("Выбор города")
-                        .listStyle(PlainListStyle())
+                } else if !settlements.isEmpty {
+                    List(settlements) { settlement in
+                        ChevronRowView(text: settlement.title ?? "")
+                            .listRowSeparator(.hidden)
+                            .onTapGesture {
+                                vM.setSettlement(direction, value: settlement)
+                                vM.setStation(direction, value: nil)
+                                vM.path.append("SelectStation\(direction.rawValue)")
+                            }
                     }
+                    .scrollIndicators(.hidden)
+                    .navigationTitle("Выбор города")
+                    .listStyle(PlainListStyle())
+                } else {
+                    NotFoundTextView(text: "Город не найден")
                 }
             }
         }
