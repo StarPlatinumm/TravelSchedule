@@ -9,10 +9,12 @@ struct ChevronRowView: View {
     
     var body: some View {
         ZStack {
-            Color.ypWhite.edgesIgnoringSafeArea(.all)
+            Color.ypWhite.ignoresSafeArea(.all)
+            
             HStack {
                 Text(text)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                
                 Image(systemName: "chevron.right")
                     .imageScale(.large)
                     .font(.system(size: 17, weight: .semibold))

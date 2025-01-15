@@ -1,14 +1,13 @@
 import SwiftUI
 
 struct SearchBar: View {
-    
     @Binding var searchText: String
     @State var isSearching: Bool = false
     var placeholder = "Поиск..."
     
     var body: some View {
-        HStack (spacing: 0) {
-            HStack (spacing: 0) {
+        HStack(spacing: 0) {
+            HStack(spacing: 0) {
                 HStack {
                     TextField(placeholder, text: $searchText)
                         .font(.system(size: 17))
@@ -19,9 +18,9 @@ struct SearchBar: View {
                 .padding()
                 .cornerRadius(16)
                 .padding(.horizontal)
-                .onTapGesture(perform: {
+                .onTapGesture {
                     isSearching = true
-                })
+                }
                 .overlay(
                     HStack {
                         Image(systemName: "magnifyingglass")

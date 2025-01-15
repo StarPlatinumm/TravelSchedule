@@ -5,11 +5,12 @@ struct CarrierInfoView: View {
     
     var body: some View {
         ZStack {
-            Color.ypWhite.edgesIgnoringSafeArea(.all)
+            Color.ypWhite.ignoresSafeArea(.all)
             
             VStack(alignment: .leading, spacing: 28) {
                 HStack {
                     Spacer()
+                    
                     AsyncImage(url: URL(string: vM.currentCarrier?.logo ?? "")) { image in
                         image.resizable()
                     } placeholder: {
@@ -17,6 +18,7 @@ struct CarrierInfoView: View {
                     }
                     .frame(maxWidth: .infinity, maxHeight: 250)
                     .clipShape(RoundedRectangle(cornerRadius: 24))
+                    
                     Spacer()
                 }
                 
@@ -25,6 +27,7 @@ struct CarrierInfoView: View {
                 
                 VStack(alignment: .leading, spacing: 0) {
                     Text("E-mail")
+                    
                     Text(vM.currentCarrier?.email ?? "-")
                         .font(.system(size: 12))
                         .foregroundColor(.ypBlue)
@@ -32,6 +35,7 @@ struct CarrierInfoView: View {
                 
                 VStack(alignment: .leading, spacing: 0) {
                     Text("Телефон")
+                    
                     Text(vM.currentCarrier?.phone ?? "-")
                         .font(.system(size: 12))
                         .foregroundColor(.ypBlue)

@@ -5,8 +5,8 @@ struct MainView: View {
     
     var body: some View {
         ZStack {
-            Color.ypWhite.edgesIgnoringSafeArea(.all)
-            VStack(alignment: .center, spacing: 16) {
+            Color.ypWhite.ignoresSafeArea(.all)
+            VStack(spacing: 16) {
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack {
                         ForEach(0..<8) { index in

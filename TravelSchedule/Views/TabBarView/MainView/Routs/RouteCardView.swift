@@ -42,6 +42,7 @@ struct RouteCardView: View {
                     }
                     .frame(width: 38, height: 38)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
+                    
                     VStack(alignment: .leading) {
                         Text(route.thread?.carrier?.title ?? "-")
                             .font(.system(size: 17))
@@ -51,22 +52,28 @@ struct RouteCardView: View {
                                 .foregroundColor(.ypRed)
                         }
                     }
+                    
                     Spacer()
+                    
                     Text(startDate)
                         .font(.system(size: 12))
                 }
                 HStack {
                     Text(departure)
+                    
                     Rectangle()
                         .foregroundColor(.ypGray)
                         .background(.ypGray)
                         .frame(height: 1)
+                    
                     Text(duration)
                         .font(.system(size: 12))
+                    
                     Rectangle()
                         .foregroundColor(.ypGray)
                         .background(.ypGray)
                         .frame(height: 1)
+                    
                     Text(arrival)
                 }
             }

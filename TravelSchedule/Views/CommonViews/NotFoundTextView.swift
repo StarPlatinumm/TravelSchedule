@@ -9,8 +9,10 @@ struct NotFoundTextView: View {
     
     var body: some View {
         Spacer()
+        
         Text(text)
             .font(.system(size: 24, weight: .bold))
+        
         Spacer()
     }
 }

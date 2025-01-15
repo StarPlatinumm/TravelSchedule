@@ -1,13 +1,10 @@
 import SwiftUI
 
 struct ErrorView: View {
-    private let errorType: ErrorType
     private let errorText: String
     private let errorImageName: String
     
     init(errorType: ErrorType) {
-        self.errorType = errorType
-        
         switch errorType {
         case .noInternet:
             errorText = "Нет интернета"
@@ -21,6 +18,7 @@ struct ErrorView: View {
     var body: some View {
         VStack (spacing: 16) {
             Image(errorImageName)
+            
             Text(errorText)
                 .font(.system(size: 24, weight: .bold))
         }

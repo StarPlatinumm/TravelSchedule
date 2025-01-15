@@ -6,7 +6,7 @@ struct SettingsView: View {
     
     var body: some View {
         ZStack {
-            Color.ypWhite.edgesIgnoringSafeArea(.all)
+            Color.ypWhite.ignoresSafeArea(.all)
             
             VStack(spacing: 16) {
                 VStack {
@@ -21,8 +21,10 @@ struct SettingsView: View {
                 }
                 
                 Spacer()
+                
                 Text("Приложение использует API «Яндекс.Расписания»")
                     .font(.system(size: 12))
+                
                 Text("Версия 1.0 (beta)")
                     .font(.system(size: 12))
             }

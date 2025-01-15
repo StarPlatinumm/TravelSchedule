@@ -1,13 +1,15 @@
 import SwiftUI
 
 struct RadioButtonRowView: View {
-    var value: Bool
     @Binding var transfersAllowed: Bool
+    let value: Bool
     
     var body: some View {
         HStack {
             Text(value ? "Да" : "Нет")
+            
             Spacer()
+            
             Button(action: {
                 self.transfersAllowed = value
             }) {

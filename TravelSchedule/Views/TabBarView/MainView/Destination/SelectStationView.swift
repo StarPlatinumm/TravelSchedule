@@ -21,7 +21,7 @@ struct SelectStationView: View {
     
     var body: some View {
         ZStack {
-            Color.ypWhite.edgesIgnoringSafeArea(.all)
+            Color.ypWhite.ignoresSafeArea(.all)
             
             VStack(spacing: 0) {
                 SearchBar(searchText: $searchText)

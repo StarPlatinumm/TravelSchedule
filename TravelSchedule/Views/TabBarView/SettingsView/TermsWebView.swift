@@ -4,7 +4,7 @@ import WebKit
 struct TermsWebView: View {
     var body: some View {
         ZStack {
-            Color.ypWhite.edgesIgnoringSafeArea(.all)
+            Color.ypWhite.ignoresSafeArea(.all)
             
             TermsWebViewContent()
                 .edgesIgnoringSafeArea(.bottom)

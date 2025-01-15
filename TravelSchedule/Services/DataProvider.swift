@@ -13,21 +13,15 @@ protocol DataProviderProtocol {
 }
 
 extension Components.Schemas.Station: Identifiable {
-    var id: UUID {
-        return UUID()
-    }
+    var id: UUID { UUID() }
 }
 
 extension Components.Schemas.Settlement: Identifiable {
-    var id: UUID {
-        return UUID()
-    }
+    var id: UUID { UUID() }
 }
 
 extension Components.Schemas.Segment: Identifiable {
-    var id: UUID {
-        return UUID()
-    }
+    var id: UUID { UUID() }
 }
 
 final class DataProvider: DataProviderProtocol {

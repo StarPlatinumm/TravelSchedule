@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TabBarView: View {
-    @StateObject var vM = MainVM()
+    @StateObject private var vM = MainVM()
     @AppStorage("isDarkThemed") private var isDarkThemed: Bool = false
     
     init() {

@@ -17,10 +17,10 @@ final class MainVM: ObservableObject {
     
     @Published var path: [String] = []
     
-    @Published var fromSettlement: Components.Schemas.Settlement? = nil
-    @Published var fromStation: Components.Schemas.Station? = nil
-    @Published var toSettlement: Components.Schemas.Settlement? = nil
-    @Published var toStation: Components.Schemas.Station? = nil
+    private var fromSettlement: Components.Schemas.Settlement?
+    private var toSettlement: Components.Schemas.Settlement?
+    @Published var fromStation: Components.Schemas.Station?
+    @Published var toStation: Components.Schemas.Station?
 
     @Published var allSettlements: [Components.Schemas.Settlement]?
     @Published var currentStations: [Components.Schemas.Station]?
@@ -42,7 +42,8 @@ final class MainVM: ObservableObject {
     }
     
     // MARK: Stations
-    func getAllStations() async {
+    @MainActor
+    private func getAllStations() async {
         do {
             let rawData = try await dataProvider.getStationsList()
             let allowedSettlements = ["Москва", "Санкт-Петербург"] // для теста только Питер и Москва
@@ -60,30 +61,21 @@ final class MainVM: ObservableObject {
             settlements = settlements.filter { $0.title != "" }
             settlements.sort { $0.title! < $1.title! }
             
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                self.allSettlements = settlements
-                self.isLoading = false
-            }
+            allSettlements = settlements
+            isLoading = false
         } catch ErrorType.serverError {
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                path = ["ServerError"]
-            }
+            path = ["ServerError"]
         } catch ErrorType.noInternet {
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                path = ["NoInternetError"]
-            }
+            path = ["NoInternetError"]
         } catch {}
     }
     
     func setSettlement(_ direction: Direction, value: Components.Schemas.Settlement?) {
         switch direction {
         case .from:
-            self.fromSettlement = value
+            fromSettlement = value
         case .to:
-            self.toSettlement = value
+            toSettlement = value
         }
         
         // для теста только вокзалы
@@ -97,9 +89,9 @@ final class MainVM: ObservableObject {
     func setStation(_ direction: Direction, value: Components.Schemas.Station?) {
         switch direction {
         case .from:
-            self.fromStation = value
+            fromStation = value
         case .to:
-            self.toStation = value
+            toStation = value
         }
     }
     
@@ -113,6 +105,7 @@ final class MainVM: ObservableObject {
         return toStation != nil && fromStation != nil
     }
     
+    @MainActor
     func searchRoutes() async {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -124,24 +117,14 @@ final class MainVM: ObservableObject {
                 to: toStation?.codes?.yandex_code ?? "",
                 date: dateString, transfers: true
             )
-            let routes = searchResult.segments
-            
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                self.currentRoutes = routes
-                self.filteredRoutes = routes
-                self.isLoading = false
-            }
+    
+            currentRoutes = searchResult.segments
+            filteredRoutes = searchResult.segments
+            isLoading = false
         } catch ErrorType.serverError {
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                path = ["ServerError"]
-            }
+            path = ["ServerError"]
         } catch ErrorType.noInternet {
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                path = ["NoInternetError"]
-            }
+            path = ["NoInternetError"]
         } catch {}
     }
     
@@ -152,7 +135,7 @@ final class MainVM: ObservableObject {
                 newData = newData.filter { isDepartureTimeOK($0.departure) }
             }
             if !transfersAllowed {
-                newData = newData.filter { isDepartureTimeOK($0.departure) }
+                newData = newData.filter { $0.has_transfers == false }
             }
             filteredRoutes = newData
         } else {
@@ -160,15 +143,15 @@ final class MainVM: ObservableObject {
         }
     }
     
-    private func isDepartureTimeOK(_ derartureString: String?) -> Bool {
-        guard let derartureString else { return false }
+    private func isDepartureTimeOK(_ departureString: String?) -> Bool {
+        guard let departureString else { return false }
         
         let calendar = Calendar.current
         
         let dateAndTimeFormatter = DateFormatter()
         dateAndTimeFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         
-        let departureDate = dateAndTimeFormatter.date(from: derartureString) ?? Date()
+        let departureDate = dateAndTimeFormatter.date(from: departureString) ?? Date()
         let departureHour = calendar.component(.hour, from: departureDate)
         let departurePeriod: DepartureTime
         

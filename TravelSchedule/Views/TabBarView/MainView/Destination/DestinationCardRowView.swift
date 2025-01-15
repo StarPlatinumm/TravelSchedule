@@ -6,7 +6,8 @@ struct DestinationCardRowView: View {
     
     var body: some View {
         ZStack {
-            Color.white.edgesIgnoringSafeArea(.all)
+            Color.white.ignoresSafeArea(.all)
+            
             Text(text ?? placeholder)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .lineLimit(1)

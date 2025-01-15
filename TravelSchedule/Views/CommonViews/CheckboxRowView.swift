@@ -1,13 +1,15 @@
 import SwiftUI
 
 struct CheckboxRowView: View {
-    var departureTime: DepartureTime
     @Binding var departureTimeSelected: [DepartureTime]
+    let departureTime: DepartureTime
     
     var body: some View {
         HStack {
             Text(departureTime.rawValue)
+            
             Spacer()
+            
             Button(action: {
                 if !departureTimeSelected.contains(departureTime) {
                     departureTimeSelected.append(departureTime)

@@ -5,11 +5,12 @@ struct RoutesListView: View {
     
     var body: some View {
         ZStack {
-            Color.ypWhite.edgesIgnoringSafeArea(.all)
+            Color.ypWhite.ignoresSafeArea(.all)
             
             VStack(spacing: 16) {
                 Text("\(vM.fromStation?.title ?? "") → \(vM.toStation?.title ?? "")")
                     .font(.system(size: 24, weight: .bold))
+                
                 if vM.isLoading {
                     Spacer()
                     ProgressView()
