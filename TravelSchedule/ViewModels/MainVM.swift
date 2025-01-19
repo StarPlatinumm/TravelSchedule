@@ -35,6 +35,10 @@ final class MainVM: ObservableObject {
     
     @Published var isLoading: Bool = false
     
+    @Published var stories: [Story] = Story.mockStories
+    @Published var isShowingStories: Bool = false
+    @Published var startStoryIndex: Int = 0
+    
     init() {
         dataProvider = DataProvider()
         isLoading = true
