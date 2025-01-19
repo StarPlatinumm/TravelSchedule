@@ -1,20 +1,6 @@
 import SwiftUI
 import Combine
 
-struct StoriesConfiguration {
-    let timerTickInternal: TimeInterval
-    let progressPerTick: CGFloat
-    
-    init(
-        storiesCount: Int,
-        secondsPerStory: TimeInterval = 5,
-        timerTickInternal: TimeInterval = 0.25
-    ) {
-        self.timerTickInternal = timerTickInternal
-        self.progressPerTick = 1.0 / CGFloat(storiesCount) / secondsPerStory * timerTickInternal
-    }
-}
-
 struct StoriesView: View {
     @EnvironmentObject private var vM: MainVM
     @State private var progress: CGFloat
@@ -33,7 +19,7 @@ struct StoriesView: View {
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            StoryView(story: getCurrentStory())
+            StoryView(story: currentStory)
             ProgressBar(numberOfSections: vM.stories.count, progress: progress)
                 .padding(.init(top: 28, leading: 12, bottom: 12, trailing: 12))
             CloseButton(action: { vM.isShowingStories = false })
@@ -51,37 +37,59 @@ struct StoriesView: View {
         .onReceive(timer ?? createTimer()) { _ in
             timerTick()
         }
-        .onTapGesture {
-            nextStory()
-            resetTimer()
-        }
         .onChange(of: currentStory) { story in
             vM.markStoryAsSeen(storyId: story.id)
         }
-    }
-    
-    private func getCurrentStory() -> Story {
-        let currentStoryIndex = Int(progress * CGFloat(vM.stories.count))
-        let currentStory = vM.stories[currentStoryIndex]
-        return currentStory
+        .onTapGesture {gestureLocation in
+            let screenWidth = UIScreen.main.bounds.width
+            let tapPosition = gestureLocation.x
+            
+            if tapPosition < screenWidth / 2 {
+                previousStory()
+            } else {
+                nextStory()
+            }
+            resetTimer()
+        }
+        .gesture(
+            DragGesture()
+                .onEnded { gesture in
+                    if gesture.translation.width < 0 {
+                        nextStory()
+                    } else if gesture.translation.width > 0 {
+                        previousStory()
+                    }
+                }
+        )
+        
     }
     
     private func timerTick() {
         var nextProgress = progress + configuration.progressPerTick
         if nextProgress >= 1 {
-            nextProgress = 0
+            vM.isShowingStories = false
+        } else {
+            withAnimation {
+                progress = nextProgress
+            }
         }
+    }
+    
+    private func previousStory() {
+        let newStoryIndex = max(0, currentStoryIndex - 1)
         withAnimation {
-            progress = nextProgress
+            progress = CGFloat(newStoryIndex) / CGFloat(vM.stories.count)
         }
     }
     
     private func nextStory() {
-        let storiesCount = vM.stories.count
-        let currentStoryIndex = Int(progress * CGFloat(storiesCount))
-        let nextStoryIndex = currentStoryIndex + 1 < storiesCount ? currentStoryIndex + 1 : 0
-        withAnimation {
-            progress = CGFloat(nextStoryIndex) / CGFloat(storiesCount)
+        let newStoryIndex = currentStoryIndex + 1
+        if newStoryIndex  == vM.stories.count {
+            vM.isShowingStories = false
+        } else {
+            withAnimation {
+                progress = CGFloat(newStoryIndex) / CGFloat(vM.stories.count)
+            }
         }
     }
     
