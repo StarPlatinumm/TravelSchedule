@@ -6,8 +6,13 @@ extension CGFloat {
 }
 
 struct ProgressBar: View {
-    let numberOfSections: Int
-    let progress: CGFloat
+    private let numberOfSections: Int
+    private let progress: CGFloat
+    
+    init(numberOfSections: Int, progress: CGFloat) {
+        self.numberOfSections = numberOfSections
+        self.progress = progress
+    }
     
     var body: some View {
         GeometryReader { geometry in
@@ -34,7 +39,11 @@ struct ProgressBar: View {
 }
 
 private struct MaskView: View {
-    let numberOfSections: Int
+    private let numberOfSections: Int
+    
+    init(numberOfSections: Int) {
+        self.numberOfSections = numberOfSections
+    }
     
     var body: some View {
         HStack {

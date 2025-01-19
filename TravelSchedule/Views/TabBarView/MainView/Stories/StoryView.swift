@@ -1,14 +1,18 @@
 import SwiftUI
 
 struct StoryView: View {
-    let story: Story
+    private let story: Story
+    
+    init(_ story: Story) {
+        self.story = story
+    }
     
     var body: some View {
         ZStack {
             story.img
                 .resizable()
                 .ignoresSafeArea()
-                
+            
             VStack {
                 Spacer()
                 VStack(alignment: .leading, spacing: 10) {
@@ -27,5 +31,5 @@ struct StoryView: View {
 }
 
 #Preview {
-    StoryView(story: Story.mockStories[0])
+    StoryView(Story.mockStories[0])
 }

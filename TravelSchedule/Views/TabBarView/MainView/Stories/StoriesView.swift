@@ -7,19 +7,19 @@ struct StoriesView: View {
     @State private var timer: Timer.TimerPublisher?
     @State private var cancellable: Cancellable?
     
-    private var configuration: StoriesConfiguration
+    private var configuration: ProgressBarConfiguration
     private var currentStoryIndex: Int { Int(progress * CGFloat(vM.stories.count)) }
     private var currentStory: Story { vM.stories[currentStoryIndex] }
     
     init(startStoryIndex: Int, storiesCount: Int) {
         progress = CGFloat(startStoryIndex) / CGFloat(storiesCount)
-        configuration = StoriesConfiguration(storiesCount: storiesCount)
+        configuration = ProgressBarConfiguration(storiesCount: storiesCount)
         timer = createTimer()
     }
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            StoryView(story: currentStory)
+            StoryView(currentStory)
             ProgressBar(numberOfSections: vM.stories.count, progress: progress)
                 .padding(.init(top: 28, leading: 12, bottom: 12, trailing: 12))
             CloseButton(action: { vM.isShowingStories = false })
@@ -65,7 +65,7 @@ struct StoriesView: View {
     }
     
     private func timerTick() {
-        var nextProgress = progress + configuration.progressPerTick
+        let nextProgress = progress + configuration.progressPerTick
         if nextProgress >= 1 {
             vM.isShowingStories = false
         } else {

@@ -17,8 +17,8 @@ struct Story: Identifiable, Equatable {
             self.title = title
             self.description = description
             self.isSeen = isSeen
-    }
-
+        }
+    
     static let mockStories = [
         Story(img: Image("story-img-1")),
         Story(img: Image("story-img-2")),
@@ -27,18 +27,4 @@ struct Story: Identifiable, Equatable {
         Story(img: Image("story-img-5")),
         Story(img: Image("story-img-6")),
     ]
-}
-
-struct StoriesConfiguration {
-    let timerTickInternal: TimeInterval
-    let progressPerTick: CGFloat
-    
-    init(
-        storiesCount: Int,
-        secondsPerStory: TimeInterval = 5,
-        timerTickInternal: TimeInterval = 0.25
-    ) {
-        self.timerTickInternal = timerTickInternal
-        self.progressPerTick = 1.0 / CGFloat(storiesCount) / secondsPerStory * timerTickInternal
-    }
 }

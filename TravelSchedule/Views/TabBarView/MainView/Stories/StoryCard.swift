@@ -1,7 +1,11 @@
 import SwiftUI
 
 struct StoryCard: View {
-    let story: Story
+    private let story: Story
+    
+    init(_ story: Story) {
+        self.story = story
+    }
     
     var body: some View {
         ZStack {
@@ -28,5 +32,5 @@ struct StoryCard: View {
 }
 
 #Preview {
-    StoryCard(story: Story.mockStories[0])
+    StoryCard(Story.mockStories[0])
 }

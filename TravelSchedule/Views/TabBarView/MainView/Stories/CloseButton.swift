@@ -1,7 +1,11 @@
 import SwiftUI
 
 struct CloseButton: View {
-    let action: () -> Void
+    private let action: () -> Void
+    
+    init(action: @escaping () -> Void) {
+        self.action = action
+    }
     
     var body: some View {
         Button(action: action) {

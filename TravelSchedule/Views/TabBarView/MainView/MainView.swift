@@ -10,7 +10,7 @@ struct MainView: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack {
                         ForEach(vM.stories) { story in
-                            StoryCard(story: story)
+                            StoryCard(story)
                                 .onTapGesture {
                                     vM.onStoryCardTap(story.id)
                                 }
