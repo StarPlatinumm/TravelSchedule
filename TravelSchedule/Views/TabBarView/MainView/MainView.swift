@@ -11,6 +11,9 @@ struct MainView: View {
                     LazyHStack {
                         ForEach(vM.stories) { story in
                             StoryCard(story: story)
+                                .onTapGesture {
+                                    vM.onStoryCardTap(story.id)
+                                }
                         }
                     }
                 }
@@ -40,7 +43,7 @@ struct MainView: View {
             .padding(.horizontal, 16)
         }
         .fullScreenCover(isPresented: $vM.isShowingStories) {
-            StoriesView(storiesCount: vM.stories.count, startStoryIndex: vM.startStoryIndex)
+            StoriesView(startStoryIndex: vM.startStoryIndex, storiesCount: vM.stories.count)
         }
     }
 }

@@ -1,11 +1,11 @@
 import SwiftUI
 
-struct Story: Identifiable {
+struct Story: Identifiable, Equatable {
     let id: UUID
     let img: Image
     let title: String
     let description: String
-    let isSeen: Bool
+    var isSeen: Bool
     
     init(
         img: Image,

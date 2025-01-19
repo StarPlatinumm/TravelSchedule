@@ -1,7 +1,6 @@
 import SwiftUI
 
 struct StoryCard: View {
-    @EnvironmentObject private var vM: MainVM
     let story: Story
     
     var body: some View {
@@ -25,14 +24,9 @@ struct StoryCard: View {
                 .background(story.isSeen ? .white.opacity(0.3) : .white.opacity(0))
                 .clipShape(RoundedRectangle(cornerRadius: 16))
         )
-        .onTapGesture {
-            vM.isShowingStories = true
-            vM.startStoryIndex = vM.stories.firstIndex(where: { $0.id == story.id }) ?? 0
-        }
     }
 }
 
 #Preview {
     StoryCard(story: Story.mockStories[0])
-        .environmentObject(MainVM())
 }

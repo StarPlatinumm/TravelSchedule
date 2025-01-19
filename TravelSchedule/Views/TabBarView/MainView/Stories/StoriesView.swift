@@ -4,7 +4,7 @@ import Combine
 struct StoriesConfiguration {
     let timerTickInternal: TimeInterval
     let progressPerTick: CGFloat
-
+    
     init(
         storiesCount: Int,
         secondsPerStory: TimeInterval = 5,
@@ -18,23 +18,22 @@ struct StoriesConfiguration {
 struct StoriesView: View {
     @EnvironmentObject private var vM: MainVM
     @State private var progress: CGFloat
-    @State private var timer: Timer.TimerPublisher
+    @State private var timer: Timer.TimerPublisher?
     @State private var cancellable: Cancellable?
     
     private var configuration: StoriesConfiguration
-    private var currentStory: Story { vM.stories[currentStoryIndex] }
     private var currentStoryIndex: Int { Int(progress * CGFloat(vM.stories.count)) }
+    private var currentStory: Story { vM.stories[currentStoryIndex] }
     
-
-    init(storiesCount: Int, startStoryIndex: Int) {
+    init(startStoryIndex: Int, storiesCount: Int) {
         progress = CGFloat(startStoryIndex) / CGFloat(storiesCount)
         configuration = StoriesConfiguration(storiesCount: storiesCount)
-        timer = Self.createTimer(configuration: configuration)
+        timer = createTimer()
     }
-
+    
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            StoryView(story: currentStory)
+            StoryView(story: getCurrentStory())
             ProgressBar(numberOfSections: vM.stories.count, progress: progress)
                 .padding(.init(top: 28, leading: 12, bottom: 12, trailing: 12))
             CloseButton(action: { vM.isShowingStories = false })
@@ -42,21 +41,31 @@ struct StoriesView: View {
                 .padding(.trailing, 12)
         }
         .onAppear {
-            timer = Self.createTimer(configuration: configuration)
-            cancellable = timer.connect()
+            timer = createTimer()
+            cancellable = timer?.connect()
+            vM.markStoryAsSeen(storyId: currentStory.id)
         }
         .onDisappear {
             cancellable?.cancel()
         }
-        .onReceive(timer) { _ in
+        .onReceive(timer ?? createTimer()) { _ in
             timerTick()
         }
         .onTapGesture {
             nextStory()
             resetTimer()
         }
+        .onChange(of: currentStory) { story in
+            vM.markStoryAsSeen(storyId: story.id)
+        }
     }
-
+    
+    private func getCurrentStory() -> Story {
+        let currentStoryIndex = Int(progress * CGFloat(vM.stories.count))
+        let currentStory = vM.stories[currentStoryIndex]
+        return currentStory
+    }
+    
     private func timerTick() {
         var nextProgress = progress + configuration.progressPerTick
         if nextProgress >= 1 {
@@ -66,7 +75,7 @@ struct StoriesView: View {
             progress = nextProgress
         }
     }
-
+    
     private func nextStory() {
         let storiesCount = vM.stories.count
         let currentStoryIndex = Int(progress * CGFloat(storiesCount))
@@ -75,19 +84,19 @@ struct StoriesView: View {
             progress = CGFloat(nextStoryIndex) / CGFloat(storiesCount)
         }
     }
-
+    
     private func resetTimer() {
         cancellable?.cancel()
-        timer = Self.createTimer(configuration: configuration)
-        cancellable = timer.connect()
+        timer = createTimer()
+        cancellable = timer?.connect()
     }
-
-    private static func createTimer(configuration: StoriesConfiguration) -> Timer.TimerPublisher {
+    
+    private func createTimer() -> Timer.TimerPublisher {
         Timer.publish(every: configuration.timerTickInternal, on: .main, in: .common)
     }
 }
 
 #Preview {
-    StoriesView(storiesCount: 6, startStoryIndex: 3)
+    StoriesView(startStoryIndex: MainVM().startStoryIndex, storiesCount: MainVM().stories.count)
         .environmentObject(MainVM())
 }
