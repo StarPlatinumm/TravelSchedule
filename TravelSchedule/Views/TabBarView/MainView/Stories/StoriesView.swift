@@ -52,12 +52,14 @@ struct StoriesView: View {
             resetTimer()
         }
         .gesture(
-            DragGesture()
-                .onEnded { gesture in
-                    if gesture.translation.width < 0 {
-                        nextStory()
-                    } else if gesture.translation.width > 0 {
-                        previousStory()
+            DragGesture(minimumDistance: 20, coordinateSpace: .global)
+                .onEnded { value in
+                    switch(value.translation.width, value.translation.height) {
+                    case (...0, -30...30):  nextStory()
+                    case (0..., -30...30):  previousStory()
+                    case (-100...100, ...0):  print("up swipe")
+                    case (-100...100, 0...):  vM.isShowingStories = false
+                    default:  print("no clue")
                     }
                 }
         )
