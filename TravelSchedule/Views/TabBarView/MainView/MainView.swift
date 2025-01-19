@@ -9,13 +9,11 @@ struct MainView: View {
             VStack(spacing: 16) {
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack {
-                        ForEach(0..<8) { index in
-                            ZStack {
-                                
-                            }
-                            .frame(width: 92, height: 140)
-                            .background(.ypGray)
-                            .clipShape(RoundedRectangle(cornerRadius: 16))
+                        ForEach(vM.stories) { story in
+                            StoryCard(story)
+                                .onTapGesture {
+                                    vM.onStoryCardTap(story.id)
+                                }
                         }
                     }
                 }
@@ -43,6 +41,9 @@ struct MainView: View {
                 Spacer()
             }
             .padding(.horizontal, 16)
+        }
+        .fullScreenCover(isPresented: $vM.isShowingStories) {
+            StoriesView(startStoryIndex: vM.startStoryIndex, storiesCount: vM.stories.count)
         }
     }
 }

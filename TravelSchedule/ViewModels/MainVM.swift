@@ -21,7 +21,7 @@ final class MainVM: ObservableObject {
     private var toSettlement: Components.Schemas.Settlement?
     @Published var fromStation: Components.Schemas.Station?
     @Published var toStation: Components.Schemas.Station?
-
+    
     @Published var allSettlements: [Components.Schemas.Settlement]?
     @Published var currentStations: [Components.Schemas.Station]?
     
@@ -34,6 +34,10 @@ final class MainVM: ObservableObject {
     @Published var transfersAllowed: Bool = true
     
     @Published var isLoading: Bool = false
+    
+    @Published var stories: [Story] = Story.mockStories
+    @Published var startStoryIndex: Int = 0
+    @Published var isShowingStories: Bool = false
     
     init() {
         dataProvider = DataProvider()
@@ -117,7 +121,7 @@ final class MainVM: ObservableObject {
                 to: toStation?.codes?.yandex_code ?? "",
                 date: dateString, transfers: true
             )
-    
+            
             currentRoutes = searchResult.segments
             filteredRoutes = searchResult.segments
             isLoading = false
@@ -167,5 +171,19 @@ final class MainVM: ObservableObject {
         }
         
         return departureTimeSelected.contains(departurePeriod)
+    }
+    
+    // MARK: Stories
+    func markStoryAsSeen(storyId: UUID) {
+        if let index = stories.firstIndex(where: { $0.id == storyId }) {
+            stories[index].isSeen = true
+        }
+    }
+    
+    func onStoryCardTap(_ storyId: UUID) {
+        if let index = stories.firstIndex(where: { $0.id == storyId }) {
+            startStoryIndex = index
+            isShowingStories = true
+        }
     }
 }
