@@ -12,6 +12,7 @@ enum DepartureTime: String {
     case night = "Ночь 00:00 - 06:00"
 }
 
+@MainActor
 final class MainVM: ObservableObject {
     private let dataProvider: DataProviderProtocol
     
@@ -46,7 +47,6 @@ final class MainVM: ObservableObject {
     }
     
     // MARK: Stations
-    @MainActor
     private func getAllStations() async {
         do {
             let rawData = try await dataProvider.getStationsList()
@@ -108,8 +108,7 @@ final class MainVM: ObservableObject {
     func isAbleToSearchRoutes() -> Bool {
         return toStation != nil && fromStation != nil
     }
-    
-    @MainActor
+
     func searchRoutes() async {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
