@@ -12,6 +12,10 @@ enum DepartureTime: String {
     case night = "Ночь 00:00 - 06:00"
 }
 
+// Мне удобно использовать одну VM для всех экранов и передавать её как EnvironmentObject
+// Так легче организовать навигацию и "прокидывание" данных
+// Плюс, единая VM уместилась всего в <200 строк 
+
 @MainActor
 final class MainVM: ObservableObject {
     private let dataProvider: DataProviderProtocol
