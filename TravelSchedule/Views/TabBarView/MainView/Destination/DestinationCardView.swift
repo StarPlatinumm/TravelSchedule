@@ -1,21 +1,30 @@
 import SwiftUI
 
 struct DestinationCardView: View {
-    @EnvironmentObject private var vM: MainVM
+    @EnvironmentObject private var navigationVM: NavigationVM
+    @ObservedObject private var stationsVM: StationsVM
+    
+    init(stationsVM: StationsVM) {
+        self.stationsVM = stationsVM
+    }
     
     var body: some View {
         HStack(spacing: 16) {
             VStack(alignment: .leading, spacing: 0) {
-                DestinationCardRowView(text: vM.fromStation?.title, placeholder: "Откуда")
-                    .onTapGesture { vM.path.append("SelectSettlementFrom") }
+                DestinationCardRowView(text: stationsVM.fromStation?.title, placeholder: "Откуда")
+                    .onTapGesture {
+                        navigationVM.path.append("SelectSettlementFrom")
+                    }
                 
-                DestinationCardRowView(text: vM.toStation?.title, placeholder: "Куда")
-                    .onTapGesture { vM.path.append("SelectSettlementTo") }
+                DestinationCardRowView(text: stationsVM.toStation?.title, placeholder: "Куда")
+                    .onTapGesture {
+                        navigationVM.path.append("SelectSettlementTo")
+                    }
             }
             .background(.white)
             .clipShape(RoundedRectangle(cornerRadius: 20))
             
-            Button(action: vM.swapFromTo) {
+            Button(action: stationsVM.swapFromTo) {
                 ZStack {
                     Circle()
                         .fill(.white)
@@ -35,8 +44,8 @@ struct DestinationCardView: View {
 
 #Preview {
     VStack {
-        DestinationCardView()
+        DestinationCardView(stationsVM: StationsVM())
             .padding()
-            .environmentObject(MainVM())
+            .environmentObject(NavigationVM())
     }
 }

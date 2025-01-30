@@ -1,7 +1,14 @@
 import SwiftUI
 
 struct RoutesFiltersView: View {
-    @EnvironmentObject private var vM: MainVM
+    @EnvironmentObject private var navigationVM: NavigationVM
+    @ObservedObject private var filterVM: FilterVM
+    @ObservedObject private var routesVM: RoutesVM
+    
+    init(filterVM: FilterVM, routesVM: RoutesVM) {
+        self.filterVM = filterVM
+        self.routesVM = routesVM
+    }
     
     var body: some View {
         ZStack {
@@ -12,25 +19,25 @@ struct RoutesFiltersView: View {
                     .font(.system(size: 24, weight: .bold))
                 
                 VStack(spacing: 0) {
-                    CheckboxRowView(departureTimeSelected: $vM.departureTimeSelected, departureTime: .morning)
-                    CheckboxRowView(departureTimeSelected: $vM.departureTimeSelected, departureTime: .afternoon)
-                    CheckboxRowView(departureTimeSelected: $vM.departureTimeSelected, departureTime: .evening)
-                    CheckboxRowView(departureTimeSelected: $vM.departureTimeSelected, departureTime: .night)
+                    CheckboxRowView(departureTimeSelected: $filterVM.departureTimeSelected, departureTime: .morning)
+                    CheckboxRowView(departureTimeSelected: $filterVM.departureTimeSelected, departureTime: .afternoon)
+                    CheckboxRowView(departureTimeSelected: $filterVM.departureTimeSelected, departureTime: .evening)
+                    CheckboxRowView(departureTimeSelected: $filterVM.departureTimeSelected, departureTime: .night)
                 }
                 
                 Text("Показывать варианты с пересадками")
                     .font(.system(size: 24, weight: .bold))
                 
                 VStack(spacing: 0) {
-                    RadioButtonRowView(transfersAllowed: $vM.transfersAllowed, value: true)
-                    RadioButtonRowView(transfersAllowed: $vM.transfersAllowed, value: false)
+                    RadioButtonRowView(transfersAllowed: $filterVM.transfersAllowed, value: true)
+                    RadioButtonRowView(transfersAllowed: $filterVM.transfersAllowed, value: false)
                 }
                 
                 Spacer()
                 
                 Button("Применить", action: {
-                    vM.filterRoutes()
-                    vM.path.removeLast()
+                    routesVM.filterRoutes(departureTimeFilter: filterVM.departureTimeSelected, transfersAllowed: filterVM.transfersAllowed)
+                    navigationVM.path.removeLast()
                 })
                 .frame(maxWidth: .infinity, minHeight: 60)
                 .font(.system(size: 17, weight: .bold))
@@ -45,6 +52,6 @@ struct RoutesFiltersView: View {
 }
 
 #Preview {
-    RoutesFiltersView()
-        .environmentObject(MainVM())
+    RoutesFiltersView(filterVM: FilterVM(), routesVM: RoutesVM())
+        .environmentObject(NavigationVM())
 }

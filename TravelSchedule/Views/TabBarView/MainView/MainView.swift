@@ -1,7 +1,15 @@
 import SwiftUI
 
 struct MainView: View {
-    @EnvironmentObject private var vM: MainVM
+    @EnvironmentObject private var navigationVM: NavigationVM
+    @ObservedObject private var storiesVM = StoriesVM()
+    @ObservedObject private var stationsVM: StationsVM
+    @ObservedObject private var routesVM: RoutesVM
+    
+    init(stationsVM: StationsVM, routesVM: RoutesVM) {
+        self.stationsVM = stationsVM
+        self.routesVM = routesVM
+    }
     
     var body: some View {
         ZStack {
@@ -9,26 +17,33 @@ struct MainView: View {
             VStack(spacing: 16) {
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack {
-                        ForEach(vM.stories) { story in
+                        ForEach(storiesVM.stories) { story in
                             StoryCard(story)
                                 .onTapGesture {
-                                    vM.onStoryCardTap(story.id)
+                                    storiesVM.onStoryCardTap(story.id)
                                 }
                         }
                     }
                 }
                 .frame(height: 188)
                 
-                DestinationCardView()
+                DestinationCardView(stationsVM: stationsVM)
                     .frame(height: 128)
                 
-                if vM.isAbleToSearchRoutes() {
+                if stationsVM.isAbleToSearchRoutes() {
                     Button("Найти", action: {
-                        vM.isLoading = true
+                        routesVM.fromStation = stationsVM.fromStation
+                        routesVM.toStation = stationsVM.toStation
                         Task {
-                            await vM.searchRoutes()
+                            do {
+                                try await routesVM.searchRoutes()
+                            } catch ErrorType.serverError {
+                                navigationVM.path = ["ServerError"]
+                            } catch ErrorType.noInternet {
+                                navigationVM.path = ["NoInternetError"]
+                            } catch {}
                         }
-                        vM.path.append("RoutesList")
+                        navigationVM.path.append("RoutesList")
                     })
                     .font(.system(size: 17, weight: .bold))
                     .padding(.vertical, 20)
@@ -42,13 +57,13 @@ struct MainView: View {
             }
             .padding(.horizontal, 16)
         }
-        .fullScreenCover(isPresented: $vM.isShowingStories) {
-            StoriesView(startStoryIndex: vM.startStoryIndex, storiesCount: vM.stories.count)
+        .fullScreenCover(isPresented: $storiesVM.isShowingStories) {
+            StoriesView(storiesVM: storiesVM)
         }
     }
 }
 
 #Preview {
-    MainView()
-        .environmentObject(MainVM())
+    MainView(stationsVM: StationsVM(), routesVM: RoutesVM())
+        .environmentObject(NavigationVM())
 }

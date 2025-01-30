@@ -1,19 +1,21 @@
 import SwiftUI
 
 struct SelectStationView: View {
-    @EnvironmentObject private var vM: MainVM
+    @EnvironmentObject private var navigationVM: NavigationVM
+    @ObservedObject private var stationsVM: StationsVM
     @State private var searchText: String = ""
     private let direction: Direction
     
-    init(direction: Direction) {
+    init(direction: Direction, stationsVM: StationsVM) {
         self.direction = direction
+        self.stationsVM = stationsVM
     }
     
     var stations: [Components.Schemas.Station] {
         if searchText.isEmpty {
-            return vM.currentStations ?? []
+            return stationsVM.currentStations ?? []
         } else {
-            return vM.currentStations?.filter {
+            return stationsVM.currentStations?.filter {
                 $0.title?.lowercased().contains(searchText.lowercased()) ?? false
             } ?? []
         }
@@ -31,8 +33,8 @@ struct SelectStationView: View {
                         ChevronRowView(text: item.title ?? "")
                             .listRowSeparator(.hidden)
                             .onTapGesture {
-                                vM.setStation(direction, value: item)
-                                vM.path = []
+                                stationsVM.setStation(direction, value: item)
+                                navigationVM.path = []
                             }
                     }
                     .scrollIndicators(.hidden)
@@ -47,6 +49,6 @@ struct SelectStationView: View {
 }
 
 #Preview {
-    SelectStationView(direction: .to)
-        .environmentObject(MainVM())
+    SelectStationView(direction: .to, stationsVM: StationsVM())
+        .environmentObject(NavigationVM())
 }

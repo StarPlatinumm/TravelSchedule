@@ -1,40 +1,47 @@
 import SwiftUI
 
 struct RoutesListView: View {
-    @EnvironmentObject private var vM: MainVM
+    @EnvironmentObject private var navigationVM: NavigationVM
+    @ObservedObject private var routesVM: RoutesVM
+    @ObservedObject private var filterVM: FilterVM
+    
+    init(routesVM: RoutesVM, filterVM: FilterVM) {
+        self.routesVM = routesVM
+        self.filterVM = filterVM
+    }
     
     var body: some View {
         ZStack {
             Color.ypWhite.ignoresSafeArea(.all)
             
             VStack(spacing: 16) {
-                Text("\(vM.fromStation?.title ?? "") → \(vM.toStation?.title ?? "")")
+                Text("\(routesVM.fromStation?.title ?? "") → \(routesVM.toStation?.title ?? "")")
                     .font(.system(size: 24, weight: .bold))
                 
-                if vM.isLoading {
+                if routesVM.isLoading {
                     Spacer()
                     ProgressView()
                     Spacer()
-                } else if let routes = vM.filteredRoutes {
+                } else if let routes = routesVM.filteredRoutes {
                     List(routes) { route in
                         RouteCardView(route: route)
                             .listRowSeparator(.hidden)
                             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
                             .onTapGesture {
-                                vM.currentCarrier = route.thread?.carrier
-                                vM.path.append("CarrierInfo")
+                                routesVM.currentCarrier = route.thread?.carrier
+                                navigationVM.path.append("CarrierInfo")
                             }
                     }
                     .scrollIndicators(.hidden)
                     .listStyle(PlainListStyle())
                     .safeAreaInset(edge: .bottom) {
                         Button(action: {
-                            vM.path.append("RoutesFilters")
+                            navigationVM.path.append("RoutesFilters")
                         }) {
                             HStack {
                                 Text("Уточнить время")
                                     .font(.system(size: 17, weight: .bold))
-                                if !vM.departureTimeSelected.isEmpty {
+                                if !filterVM.departureTimeSelected.isEmpty {
                                     Circle()
                                         .frame(width: 8, height: 8)
                                         .foregroundColor(.ypRed)
@@ -58,6 +65,6 @@ struct RoutesListView: View {
 }
 
 #Preview {
-    RoutesListView()
-        .environmentObject(MainVM())
+    RoutesListView(routesVM: RoutesVM(), filterVM: FilterVM())
+        .environmentObject(NavigationVM())
 }
