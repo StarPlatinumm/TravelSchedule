@@ -1,7 +1,11 @@
 import SwiftUI
 
 struct CarrierInfoView: View {
-    @EnvironmentObject private var vM: MainVM
+    private let carrier: Components.Schemas.Carrier
+    
+    init(carrier: Components.Schemas.Carrier) {
+        self.carrier = carrier
+    }
     
     var body: some View {
         ZStack {
@@ -11,7 +15,7 @@ struct CarrierInfoView: View {
                 HStack {
                     Spacer()
                     
-                    AsyncImage(url: URL(string: vM.currentCarrier?.logo ?? "")) { image in
+                    AsyncImage(url: URL(string: carrier.logo ?? "")) { image in
                         image.resizable()
                     } placeholder: {
                         ProgressView()
@@ -22,13 +26,13 @@ struct CarrierInfoView: View {
                     Spacer()
                 }
                 
-                Text(vM.currentCarrier?.title ?? "-")
+                Text(carrier.title ?? "-")
                     .font(.system(size: 24, weight: .bold))
                 
                 VStack(alignment: .leading, spacing: 0) {
                     Text("E-mail")
                     
-                    Text(vM.currentCarrier?.email ?? "-")
+                    Text(carrier.email ?? "-")
                         .font(.system(size: 12))
                         .foregroundColor(.ypBlue)
                 }
@@ -36,7 +40,7 @@ struct CarrierInfoView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     Text("Телефон")
                     
-                    Text(vM.currentCarrier?.phone ?? "-")
+                    Text(carrier.phone ?? "-")
                         .font(.system(size: 12))
                         .foregroundColor(.ypBlue)
                 }
@@ -50,6 +54,5 @@ struct CarrierInfoView: View {
 }
 
 #Preview {
-    CarrierInfoView()
-        .environmentObject(MainVM())
+    CarrierInfoView(carrier: Components.Schemas.Carrier(title: "ОАО \"РЖД\"", phone: "+7 (987) 654-32-10", logo: "", email: "rzhd@rzhd.ru"))
 }

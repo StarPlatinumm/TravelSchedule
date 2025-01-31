@@ -1,19 +1,21 @@
 import SwiftUI
 
 struct SelectSettlementView: View {
-    @EnvironmentObject private var vM: MainVM
+    @EnvironmentObject private var navigationVM: NavigationVM
+    @ObservedObject private var stationsVM: StationsVM
     @State private var searchText: String = ""
     private let direction: Direction
     
-    init(direction: Direction) {
+    init(direction: Direction, stationsVM: StationsVM) {
         self.direction = direction
+        self.stationsVM = stationsVM
     }
     
     var settlements: [Components.Schemas.Settlement] {
         if searchText.isEmpty {
-            return vM.allSettlements ?? []
+            return stationsVM.allSettlements ?? []
         } else {
-            return vM.allSettlements?.filter {
+            return stationsVM.allSettlements?.filter {
                 $0.title?.lowercased().contains(searchText.lowercased()) ?? false
             } ?? []
         }
@@ -26,7 +28,7 @@ struct SelectSettlementView: View {
             VStack(spacing: 0) {
                 SearchBar(searchText: $searchText)
                     .padding(.bottom, 16)
-                if vM.isLoading {
+                if stationsVM.isLoading {
                     Spacer()
                     ProgressView()
                     Spacer()
@@ -35,9 +37,9 @@ struct SelectSettlementView: View {
                         ChevronRowView(text: settlement.title ?? "")
                             .listRowSeparator(.hidden)
                             .onTapGesture {
-                                vM.setSettlement(direction, value: settlement)
-                                vM.setStation(direction, value: nil)
-                                vM.path.append("SelectStation\(direction.rawValue)")
+                                stationsVM.setSettlement(direction, value: settlement)
+                                stationsVM.setStation(direction, value: nil)
+                                navigationVM.path.append("SelectStation\(direction.rawValue)")
                             }
                     }
                     .scrollIndicators(.hidden)
@@ -52,6 +54,6 @@ struct SelectSettlementView: View {
 }
 
 #Preview {
-    SelectSettlementView(direction: .to)
-        .environmentObject(MainVM())
+    SelectSettlementView(direction: .to, stationsVM: StationsVM())
+        .environmentObject(NavigationVM())
 }

@@ -7,7 +7,7 @@ enum ErrorType: Error {
     case serverError
 }
 
-protocol DataProviderProtocol {
+protocol DataProviderProtocol: Sendable {
     func getSearch(from: String, to: String, date: String, transfers: Bool) async throws -> Components.Schemas.SearchResults
     func getStationsList() async throws -> Components.Schemas.StationsList
 }
@@ -24,7 +24,7 @@ extension Components.Schemas.Segment: Identifiable {
     var id: UUID { UUID() }
 }
 
-final class DataProvider: DataProviderProtocol {
+actor DataProvider: DataProviderProtocol {
     private let client = Client(serverURL: try! Servers.Server1.url(), transport: URLSessionTransport())
     private let apikey = "4f5cb8fb-cdbd-4619-8ebf-aedd5c80cc35"
     
@@ -37,7 +37,6 @@ final class DataProvider: DataProviderProtocol {
                 date: date,
                 transfers: transfers
             ))
-
             return try response.ok.body.json
         } catch {
             print("Error: \(error)")

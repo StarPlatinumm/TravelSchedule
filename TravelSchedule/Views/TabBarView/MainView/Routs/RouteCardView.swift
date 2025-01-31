@@ -1,9 +1,7 @@
 import SwiftUI
 
 struct RouteCardView: View {
-    @EnvironmentObject private var vM: MainVM
     private let route: Components.Schemas.Segment
-    
     private let departure: String
     private let arrival: String
     private let startDate: String

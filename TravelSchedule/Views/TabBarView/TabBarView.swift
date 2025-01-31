@@ -1,7 +1,11 @@
 import SwiftUI
 
 struct TabBarView: View {
-    @StateObject private var vM = MainVM()
+    @ObservedObject private var navigationVM = NavigationVM()
+    @ObservedObject private var stationsVM = StationsVM()
+    @ObservedObject private var filterVM = FilterVM()
+    @ObservedObject private var routesVM = RoutesVM()
+    
     @AppStorage("isDarkThemed") private var isDarkThemed: Bool = false
     
     init() {
@@ -9,9 +13,9 @@ struct TabBarView: View {
     }
     
     var body: some View {
-        NavigationStack(path: $vM.path) {
+        NavigationStack(path: $navigationVM.path) {
             TabView {
-                MainView()
+                MainView(stationsVM: stationsVM, routesVM: routesVM)
                     .tabItem {
                         Label("", image: "tab-item-main")
                     }
@@ -23,19 +27,19 @@ struct TabBarView: View {
             .navigationDestination(for: String.self) { id in
                 switch id {
                 case "SelectSettlementFrom":
-                    SelectSettlementView(direction: .from)
+                    SelectSettlementView(direction: .from, stationsVM: stationsVM)
                 case "SelectSettlementTo":
-                    SelectSettlementView(direction: .to)
+                    SelectSettlementView(direction: .to, stationsVM: stationsVM)
                 case "SelectStationFrom":
-                    SelectStationView(direction: .from)
+                    SelectStationView(direction: .from, stationsVM: stationsVM)
                 case "SelectStationTo":
-                    SelectStationView(direction: .to)
+                    SelectStationView(direction: .to, stationsVM: stationsVM)
                 case "RoutesList":
-                    RoutesListView()
+                    RoutesListView(routesVM: routesVM, filterVM: filterVM)
                 case "RoutesFilters":
-                    RoutesFiltersView()
+                    RoutesFiltersView(filterVM: filterVM, routesVM: routesVM)
                 case "CarrierInfo":
-                    CarrierInfoView()
+                    CarrierInfoView(carrier: routesVM.currentCarrier!)
                 case "TermsWebView":
                     TermsWebView()
                 case "ServerError":
@@ -49,7 +53,17 @@ struct TabBarView: View {
         }
         .accentColor(.ypBlack)
         .environment(\.colorScheme, isDarkThemed ? .dark : .light)
-        .environmentObject(vM)
+        .environmentObject(navigationVM)
+        .task {
+            // загружаем список станций
+            do {
+                try await stationsVM.getAllStations()
+            } catch ErrorType.serverError {
+                navigationVM.path = ["ServerError"]
+            } catch ErrorType.noInternet {
+                navigationVM.path = ["NoInternetError"]
+            } catch {}
+        }
     }
 }
 
